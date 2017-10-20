@@ -1,4 +1,5 @@
 public class PruebaClass {
 
-    int hola = 1;
+    int hola = 0;
+    String ha = "";
 }
