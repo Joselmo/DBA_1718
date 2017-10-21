@@ -3,11 +3,6 @@ import es.upv.dsic.gti_ia.core.AgentsConnection;
 
 public class PruebaClass {
 
-<<<<<<< HEAD
-    int hola = 0;
-    String ha = "Esto es una prueba de un commit -Diego, y esto es para forzar a que haya conflicto";
-    String asdf = "asdfaasdasdadsa";
-=======
     public static void main(String[] args) {
         GugelCar gugelCar;
 
@@ -24,5 +19,4 @@ public class PruebaClass {
             e.printStackTrace();
         }
     }
->>>>>>> 473aabfaf9a285dfa606d27755e9823efaeb25ad
 }
