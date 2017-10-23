@@ -18,7 +18,7 @@ public class GugelCar extends SingleAgent{
     /**
      * Constructor
      *
-     * @author Diego Iáñez Ávila, David Vargas Carrillo
+     * @author Diego Iáñez Ávila, David Vargas Carrillo, Andrés Molina López
      * @param aid ID del agente
      * @throws Exception si no puede crear el agente
      */

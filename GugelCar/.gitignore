@@ -1,2 +1,4 @@
 GugelCar.iml
-
+*.class
+*.png
+vcs.xml
