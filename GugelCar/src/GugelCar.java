@@ -5,7 +5,6 @@ import com.eclipsesource.json.JsonValue;
 import es.upv.dsic.gti_ia.core.ACLMessage;
 import es.upv.dsic.gti_ia.core.AgentID;
 import es.upv.dsic.gti_ia.core.SingleAgent;
-import org.codehaus.jettison.json.JSONObject;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
