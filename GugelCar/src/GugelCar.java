@@ -145,7 +145,7 @@ public class GugelCar extends SingleAgent{
     }
 
     /**
-     * Envia un comando al controlador
+     * Envía un comando al controlador
      *
      * @author Diego Iáñez Ávila
      * @param command Comando a enviar
