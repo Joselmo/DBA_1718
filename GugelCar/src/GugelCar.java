@@ -18,7 +18,7 @@ public class GugelCar extends SingleAgent{
     /**
      * Constructor
      *
-     * @author Diego Iáñez Ávila, David Vargas Carrillo, Andrés Molina López
+     * @author Diego Iáñez Ávila
      * @param aid ID del agente
      * @throws Exception si no puede crear el agente
      */
@@ -44,6 +44,7 @@ public class GugelCar extends SingleAgent{
         jsonLogin.add("command", "login");
         jsonLogin.add("world", "map1");
         jsonLogin.add("radar", agentID);
+        //jsonLogin.add("scanner", agentID);
 
         sendMessage(jsonLogin.toString());
 
