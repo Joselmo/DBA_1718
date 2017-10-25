@@ -14,6 +14,7 @@ public class GugelCar extends SingleAgent{
     private String password;
     private AgentID controllerID;
     private boolean reachedGoal; //@todo borrar esta variable
+    //@todo borrar este comentario (prueba de github)
 
     // Elementos para la percepcion inmediata del agente
     private int numSensores = 2;
@@ -86,21 +87,97 @@ public class GugelCar extends SingleAgent{
 
             // Comprobamos que no se haya alcanzado el objetivo y que se tenga bateria
             if (!reachedGoal && bateriaCar > 2) {
+                String nextMove = findNextMove();
+                moveTo(nextMove);
+
+                /*
                 sendCommand("moveSW");
                 mapaMundo[pos_fila_mapa][pos_col_mapa] += 1; // Marcamos que hemos pasado por esa casilla
                 pos_fila_mapa -= 1; // Desplazmos la posición según el movimiento hecho
                 pos_col_mapa -= 1;
                 bateriaCar -= 1; // Reducimos la batería
+                */
             }
 
             if (bateriaCar <= 2){
+                refuel();
+
+                /*
                 sendCommand("refuel");
                 bateriaCar = 100; // Como hemos repostado, la volvemos a poner al máximo
+                */
             }
         }
 
         // Terminar sesión
         endSession();
+    }
+
+    /**
+     * Decide cual es el siguiente movimiento del agente
+     *
+     * @author Ángel Píñar Rivas
+     * @return String con la siguiente dirección a la que ir
+     */
+    private String findNextMove(){
+        String nextMove;
+        //@todo Implementar el algoritmo de seleccion de siguiente paso
+        nextMove = "moveSW";
+        return nextMove;
+    }
+
+    /**
+     * Envía el siguiente movimiento, actualiza el mapa interno del agente y reduce la batería
+     *
+     * @author Ángel Píñar Rivas
+     */
+    private void moveTo(String nextMove){
+        //@todo Mirar si todas las acciones de movimiento son así (están bien escritas)
+        sendCommand(nextMove);
+        mapaMundo[pos_fila_mapa][pos_col_mapa]++;
+        switch(nextMove){
+            case "moveNW":
+                pos_fila_mapa--;
+                pos_col_mapa--;
+                break;
+            case "moveN":
+                pos_fila_mapa--;
+                break;
+            case "moveNE":
+                pos_col_mapa++;
+                pos_fila_mapa--;
+                break;
+            case "moveW":
+                pos_col_mapa--;
+                break;
+            case "moveE":
+                pos_col_mapa++;
+                break;
+            case "moveSW":
+                pos_fila_mapa++; // Desplazmos la posición según el movimiento hecho
+                pos_col_mapa--;
+                break;
+            case "moveS":
+                pos_fila_mapa++;
+                break;
+            case "moveSE":
+                pos_fila_mapa++;
+                pos_col_mapa++;
+                break;
+            default:
+                break;
+        }
+        bateriaCar--;
+    }
+
+    /**
+     * Envía la acción de repostar y actualiza nuestra batería
+     *
+     * @author Ángel Píñar Rivas
+     */
+    private void refuel(){
+        sendCommand("refuel");
+        bateriaCar = 100; // Como hemos repostado, la volvemos a poner al máximo
     }
 
     /**
