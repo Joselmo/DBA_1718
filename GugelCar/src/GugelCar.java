@@ -14,19 +14,19 @@ public class GugelCar extends SingleAgent{
     private String password;
     private AgentID controllerID;
     private boolean reachedGoal; //@todo borrar esta variable
-    //@todo borrar este comentario (prueba de github)
 
     // Elementos para la percepcion inmediata del agente
-    private int numSensores = 2;
-    private int [][] radarCar = new int[3][3];
-    private float [][] scannerCar = new float[3][3];
-    private int bateriaCar = 100;
+    private int numSensores = 2;                        // Sensores que se estan utilizando en el momento
+    private int [][] radarCar = new int[3][3];          // Matriz que representa la percepcion del sensor radar
+    private float [][] scannerCar = new float[3][3];    // Matriz que representa la percepcion del sensor scanner
+    private int bateriaCar = 0;                         // Porcentaje de carga de la bateria
+                                                        // Se inicializa a 0 puesto que desconocemos su estado real
 
-    // Memoria del mundo que ha pisado el agente
-    private int [][] mapaMundo = new int[10001][10001];
-    private int pos_fila_mapa = 5000;   // Situamos al agente en medio del mundo
+    private int [][] mapaMundo = new int[10001][10001]; // Memoria del mundo que ha pisado el agente
+
+    // Situamos al agente en el centro de su memoria del mundo
+    private int pos_fila_mapa = 5000;
     private int pos_col_mapa = 5000;
-
 
     /**
      * Constructor
@@ -127,47 +127,56 @@ public class GugelCar extends SingleAgent{
     }
 
     /**
-     * Envía el siguiente movimiento, actualiza el mapa interno del agente y reduce la batería
+     * Envia el siguiente movimiento, actualiza el mapa interno del agente y reduce la bateria
      *
-     * @author Ángel Píñar Rivas
+     * @author Ángel Píñar Rivas, David Vargas Carrillo
      */
     private void moveTo(String nextMove){
-        //@todo Mirar si todas las acciones de movimiento son así (están bien escritas)
-        sendCommand(nextMove);
-        mapaMundo[pos_fila_mapa][pos_col_mapa]++;
-        switch(nextMove){
-            case "moveNW":
-                pos_fila_mapa--;
-                pos_col_mapa--;
-                break;
-            case "moveN":
-                pos_fila_mapa--;
-                break;
-            case "moveNE":
-                pos_col_mapa++;
-                pos_fila_mapa--;
-                break;
-            case "moveW":
-                pos_col_mapa--;
-                break;
-            case "moveE":
-                pos_col_mapa++;
-                break;
-            case "moveSW":
-                pos_fila_mapa++; // Desplazmos la posición según el movimiento hecho
-                pos_col_mapa--;
-                break;
-            case "moveS":
-                pos_fila_mapa++;
-                break;
-            case "moveSE":
-                pos_fila_mapa++;
-                pos_col_mapa++;
-                break;
-            default:
-                break;
+        boolean permitido = sendCommand(nextMove);
+        mapaMundo[pos_fila_mapa][pos_col_mapa]++;   //@todo revisar la funcionalidad de esta orden
+
+        if (permitido) {
+            // Se desplaza la posicion en la matriz memoria segun el movimiento decidido
+            switch (nextMove) {
+                case "moveNW":  // Movimiento noroeste
+                    pos_fila_mapa--;
+                    pos_col_mapa--;
+                    break;
+                case "moveN":  // Movimiento norte
+                    pos_fila_mapa--;
+                    break;
+                case "moveNE":  // Movimiento noreste
+                    pos_col_mapa++;
+                    pos_fila_mapa--;
+                    break;
+                case "moveW":  // Movimiento oeste
+                    pos_col_mapa--;
+                    break;
+                case "moveE":  // Movimiento este
+                    pos_col_mapa++;
+                    break;
+                case "moveSW":  // Movimiento suroeste
+                    pos_fila_mapa++;
+                    pos_col_mapa--;
+                    break;
+                case "moveS":  // Movimiento sur
+                    pos_fila_mapa++;
+                    break;
+                case "moveSE":  // Movimiento sureste
+                    pos_fila_mapa++;
+                    pos_col_mapa++;
+                    break;
+                default:        // Ningun movimiento
+                    // En el caso de que no se mueva, no pierde ningun punto de bateria
+                    bateriaCar++;
+                    break;
+            }
+            // Se resta un punto de bateria tras cada movimiento (en el caso normal)
+            bateriaCar--;
         }
-        bateriaCar--;
+        else {
+            System.err.println("Movimiento no permitido");
+        }
     }
 
     /**
