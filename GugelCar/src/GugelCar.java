@@ -193,7 +193,7 @@ public class GugelCar extends SingleAgent{
             FileOutputStream fos = new FileOutputStream("traza_" + password + ".png");
             fos.write(data);
             fos.close();
-            System.out.println("Traza guardada");
+            System.out.println("Traza guardada en " + "traza_" + password + ".png");
 
         } catch (InterruptedException | IOException ex){
             System.err.println("Error procesando traza");
