@@ -15,6 +15,18 @@ public class GugelCar extends SingleAgent{
     private AgentID controllerID;
     private boolean reachedGoal; //@todo borrar esta variable
 
+    // Elementos para la percepcion inmediata del agente
+    private int numSensores = 2;
+    private int [][] radarCar = new int[3][3];
+    private float [][] scannerCar = new float[3][3];
+    private int bateriaCar = 100;
+
+    // Memoria del mundo que ha pisado el agente
+    private int [][] mapaMundo = new int[10001][10001];
+    private int pos_fila_mapa = 5000;   // Situamos al agente en medio del mundo
+    private int pos_col_mapa = 5000;
+
+
     /**
      * Constructor
      *
@@ -44,14 +56,17 @@ public class GugelCar extends SingleAgent{
         jsonLogin.add("command", "login");
         jsonLogin.add("world", "map1");
         jsonLogin.add("radar", agentID);
-        //jsonLogin.add("scanner", agentID);
+        jsonLogin.add("scanner", agentID);
 
         sendMessage(jsonLogin.toString());
 
         // Recibir y guardar la contraseña
         try {
-            JsonObject answer = receiveJson();
-            password = answer.getString("result", null);
+            password = null;
+            while(password == null) {
+                JsonObject answer = receiveJson();
+                password = answer.getString("result", null);
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -60,7 +75,7 @@ public class GugelCar extends SingleAgent{
     /**
      * Cuerpo del agente
      *
-     * @author Diego Iáñez Ávila
+     * @author Diego Iáñez Ávila, Andrés Molina López
      */
     @Override
     public void execute(){
@@ -69,8 +84,19 @@ public class GugelCar extends SingleAgent{
         while (!reachedGoal) {
             processPerception();
 
-            if (!reachedGoal)
+            // Comprobamos que no se haya alcanzado el objetivo y que se tenga bateria
+            if (!reachedGoal && bateriaCar > 2) {
                 sendCommand("moveSW");
+                mapaMundo[pos_fila_mapa][pos_col_mapa] += 1; // Marcamos que hemos pasado por esa casilla
+                pos_fila_mapa -= 1; // Desplazmos la posición según el movimiento hecho
+                pos_col_mapa -= 1;
+                bateriaCar -= 1; // Reducimos la batería
+            }
+
+            if (bateriaCar <= 2){
+                sendCommand("refuel");
+                bateriaCar = 100; // Como hemos repostado, la volvemos a poner al máximo
+            }
         }
 
         // Terminar sesión
@@ -80,16 +106,61 @@ public class GugelCar extends SingleAgent{
     /**
      * Recibe y procesa la percepción del agente
      *
-     * @author Diego Iáñez Ávila
+     * @author Andrés Molina López
      */
     private void processPerception(){
         try {
-            JsonObject jsonRadar = receiveJson();
-            JsonArray radar = jsonRadar.get("radar").asArray();
-            int pos = radar.get(12).asInt();
+            // Recibimos los mensajes del servidor en orden
+            int sensoresRecibidos = 0;
+            while(sensoresRecibidos < numSensores){
+                JsonObject msg = receiveJson();
+                // Comprobamos si se está usando el radar y en caso afirmativo rellenamos su matriz de percepción
+                if(msg.get("radar") != null) {
+                    JsonArray radar = msg.get("radar").asArray();
+                    int pos = 6;
+                    for (int i=0; i<3; i++){
+                        for (int j=0; j<3; j++){
+                            radarCar[i][j] = radar.get(pos).asInt();
+                            pos++;
+                        }
+                        pos += 2;
+                    }
+                }
 
-            if (pos == 2)
+                // Comprobamos si se está usando el scanner y en caso afirmativo rellenamos su matriz de percepción
+                if (msg.get("scanner") != null){
+                    JsonArray scanner = msg.get("scanner").asArray();
+                    int pos = 6;
+                    for (int i=0; i<3; i++){
+                        for (int j=0; j<3; j++){
+                            scannerCar[i][j] = scanner.get(pos).asFloat();
+                            pos++;
+                        }
+                        pos += 2;
+                    }
+                }
+
+                sensoresRecibidos++;
+            }
+
+            /*  POR SI ALGUIEN QUIERE VER COMO SE ACTUALIZAN LAS PERCEPCIONES
+            // Comprobación del contenido de radar
+            System.out.println("\nContenido del radar: \n");
+            for (int i=0; i<3; i++){
+                System.out.println(radarCar[i][0] + " " + radarCar[i][1] + " " + radarCar[i][2] + "\n");
+            }
+
+            // Comprobación del contenido de scanner
+            System.out.println("\nContenido del scanner: \n");
+            for (int i=0; i<3; i++){
+                System.out.println(scannerCar[i][0] + "     " + scannerCar[i][1] + "     " + scannerCar[i][2] + "     " + "\n");
+            }
+            */
+
+            // Comprobamos si la posicion actual del coche es el objetivo
+            if (radarCar[1][1] == 2) {
                 reachedGoal = true;
+            }
 
         } catch (InterruptedException e) {
             e.printStackTrace();

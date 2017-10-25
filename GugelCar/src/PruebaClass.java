@@ -10,7 +10,7 @@ public class PruebaClass {
         AgentsConnection.connect("isg2.ugr.es", 6000, "Girtab", "Eridano", "Esquivel", false);
 
         try {
-            gugelCar = new GugelCar(new AgentID("GugelCar2"));
+            gugelCar = new GugelCar(new AgentID("GugelCar"));
 
             System.out.println("\n\n-------------------------------\n");
             gugelCar.start();
