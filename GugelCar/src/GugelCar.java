@@ -133,9 +133,11 @@ public class GugelCar extends SingleAgent{
      */
     private void moveTo(String nextMove){
         boolean permitido = sendCommand(nextMove);
-        mapaMundo[pos_fila_mapa][pos_col_mapa]++;   //@todo revisar la funcionalidad de esta orden
 
         if (permitido) {
+            // Se marca en la memoria que hemos pasado por la casilla
+            mapaMundo[pos_fila_mapa][pos_col_mapa]++;
+
             // Se desplaza la posicion en la matriz memoria segun el movimiento decidido
             switch (nextMove) {
                 case "moveNW":  // Movimiento noroeste
