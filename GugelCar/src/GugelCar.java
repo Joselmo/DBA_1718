@@ -100,6 +100,17 @@ public class GugelCar extends SingleAgent{
     }
 
     /**
+     * Le manda al servidor el comando con el movimiento del coche
+     *
+     * @author Andrés Molina López
+     * @param nextMove indica cual es el string que se va a mandar al servidor
+     */
+    public void makeMove(String nextMove) {
+        boolean resultadoMovimiento = sendCommand(nextMove);
+        cerebro.refreshMemory(resultadoMovimiento, nextMove);
+    }
+
+    /**
      * Finaliza la sesión con el controlador
      *
      * @author Diego Iáñez Ávila
