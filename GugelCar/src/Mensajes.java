@@ -22,6 +22,7 @@ public enum Mensajes {
     static final String AGENT_COM_RESULT = "result";
 
     static final String AGENT_COM_COMMAND = "command";
+    static final String AGENT_COM_KEY = "key";
     static final String AGENT_COM_WORLD = "world";
     static final String AGENT_COM_SENSOR_SCANNER = "scanner";
     static final String AGENT_COM_SENSOR_RADAR = "radar";

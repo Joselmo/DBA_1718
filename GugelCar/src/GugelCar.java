@@ -16,6 +16,7 @@ public class GugelCar extends SingleAgent{
     private AgentID controllerID;
     private Cerebro cerebro;
     private int numSensores;
+    private String mapa;
 
     /**
      * Constructor
@@ -33,18 +34,19 @@ public class GugelCar extends SingleAgent{
     /**
      * Método de inicialización del agente
      *
-     * @author Diego Iáñez Ávila
+     * @author Diego Iáñez Ávila, Jose Luis Martínez Ortiz
      */
     @Override
     public void init(){
         // Loguearse en el mapa 1
+        mapa = "map1";
         JsonValue agentID = Json.value(getAid().toString());
 
         JsonObject jsonLogin = Json.object();
-        jsonLogin.add("command", "login");
-        jsonLogin.add("world", "map1");
-        jsonLogin.add("radar", agentID);
-        jsonLogin.add("scanner", agentID);
+        jsonLogin.add(Mensajes.AGENT_COM_COMMAND, Mensajes.AGENT_COM_LOGIN);
+        jsonLogin.add(Mensajes.AGENT_COM_WORLD, mapa);
+        jsonLogin.add(Mensajes.AGENT_COM_SENSOR_RADAR, agentID);
+        jsonLogin.add(Mensajes.AGENT_COM_SENSOR_SCANNER, agentID);
 
         numSensores = 2;
         cerebro = new Cerebro(numSensores);
@@ -56,7 +58,7 @@ public class GugelCar extends SingleAgent{
             password = null;
             while(password == null) {
                 JsonObject answer = receiveJson();
-                password = answer.getString("result", null);
+                password = answer.getString(Mensajes.AGENT_COM_RESULT, null);
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -117,13 +119,13 @@ public class GugelCar extends SingleAgent{
         // Desloguearse
         System.out.println("Terminando sesión");
 
-        sendCommand("logout");
+        sendCommand(Mensajes.AGENT_COM_LOGOUT);
         processPerception();
 
         try{
             System.out.println("Recibiendo traza");
             JsonObject injson = receiveJson();
-            JsonArray ja = injson.get("trace").asArray();
+            JsonArray ja = injson.get(Mensajes.AGENT_COM_TRACE).asArray();
 
             byte data[] = new byte[ja.size()];
 
@@ -159,7 +161,7 @@ public class GugelCar extends SingleAgent{
     /**
      * Envía un comando al controlador
      *
-     * @author Diego Iáñez Ávila
+     * @author Diego Iáñez Ávila, Jose Luis Martínez Ortiz
      * @param command Comando a enviar
      * @return true si el controlador respondió con OK al comando
      */
@@ -167,21 +169,16 @@ public class GugelCar extends SingleAgent{
         boolean success = true;
 
         JsonObject jsonCommand = Json.object();
-        jsonCommand.add("command", command);
-        jsonCommand.add("key", password);
+        jsonCommand.add(Mensajes.AGENT_COM_COMMAND, command);
+        jsonCommand.add(Mensajes.AGENT_COM_KEY, password);
 
-        ACLMessage outbox = new ACLMessage();
-        outbox.setSender(getAid());
-        outbox.setReceiver(controllerID);
-        outbox.setContent(jsonCommand.toString());
-
-        send(outbox);
+        sendMessage(jsonCommand.toString());
 
         try{
             JsonObject answer = receiveJson();
-            String result = answer.getString("result", "BAD_MESSAGE");
+            String result = answer.getString(Mensajes.AGENT_COM_RESULT, Mensajes.AGENT_COM_BADMESSAGE);
 
-            if (!result.equals("OK"))
+            if (!result.equals(Mensajes.AGENT_COM_OK))
                 success = false;
 
         } catch (InterruptedException e){

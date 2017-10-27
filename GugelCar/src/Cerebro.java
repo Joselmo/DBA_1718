@@ -34,13 +34,14 @@ public class Cerebro {
     /**
      * Recibe y procesa la percepción del agente
      *
-     * @author Andrés Molina López, Diego Iáñez Ávila
+     * @author Andrés Molina López, Diego Iáñez Ávila, Jose Luis Martínez Ortiz
      */
     public void processPerception(ArrayList<JsonObject> sensores){
+
         for (JsonObject msg : sensores){
             // Comprobamos si se está usando el radar y en caso afirmativo rellenamos su matriz de percepción
-            if(msg.get("radar") != null) {
-                JsonArray radar = msg.get("radar").asArray();
+            if(msg.get(Mensajes.AGENT_COM_SENSOR_RADAR) != null) {
+                JsonArray radar = msg.get(Mensajes.AGENT_COM_SENSOR_RADAR).asArray();
                 int pos = 6;
                 for (int i=0; i<3; i++){
                     for (int j=0; j<3; j++){
@@ -52,8 +53,8 @@ public class Cerebro {
             }
 
             // Comprobamos si se está usando el scanner y en caso afirmativo rellenamos su matriz de percepción
-            if (msg.get("scanner") != null){
-                JsonArray scanner = msg.get("scanner").asArray();
+            if (msg.get(Mensajes.AGENT_COM_SENSOR_SCANNER) != null){
+                JsonArray scanner = msg.get(Mensajes.AGENT_COM_SENSOR_SCANNER).asArray();
                 int pos = 6;
                 for (int i=0; i<3; i++){
                     for (int j=0; j<3; j++){
@@ -119,15 +120,15 @@ public class Cerebro {
         float entorno[] = new float[9];
         int iter_entorno = 0;
         String direcciones[] = new String[9];
-        direcciones[0] = "moveNW";
-        direcciones[1] = "moveN";
-        direcciones[2] = "moveNE";
-        direcciones[3] = "moveW";
+        direcciones[0] = Mensajes.AGENT_COM_ACCION_MV_NW;
+        direcciones[1] = Mensajes.AGENT_COM_ACCION_MV_N;
+        direcciones[2] = Mensajes.AGENT_COM_ACCION_MV_NE;
+        direcciones[3] = Mensajes.AGENT_COM_ACCION_MV_W;
         direcciones[4] = "center"; // ¿?¿?
-        direcciones[5] = "moveE";
-        direcciones[6] = "moveSW";
-        direcciones[7] = "moveS";
-        direcciones[8] = "moveSE";
+        direcciones[5] = Mensajes.AGENT_COM_ACCION_MV_E;
+        direcciones[6] = Mensajes.AGENT_COM_ACCION_MV_SW;
+        direcciones[7] = Mensajes.AGENT_COM_ACCION_MV_S;
+        direcciones[8] = Mensajes.AGENT_COM_ACCION_MV_SE;
 
         //Almacenar en entorno los valores que detecta el radar
         for(int i=0 ; i<3 ; i++){
@@ -184,31 +185,31 @@ public class Cerebro {
 
             // Se desplaza la posicion en la matriz memoria segun el movimiento decidido
             switch (movimiento) {
-                case "moveNW":  // Movimiento noroeste
+                case Mensajes.AGENT_COM_ACCION_MV_NW:  // Movimiento noroeste
                     pos_fila_mapa--;
                     pos_col_mapa--;
                     break;
-                case "moveN":  // Movimiento norte
+                case Mensajes.AGENT_COM_ACCION_MV_N:  // Movimiento norte
                     pos_fila_mapa--;
                     break;
-                case "moveNE":  // Movimiento noreste
+                case Mensajes.AGENT_COM_ACCION_MV_NE:  // Movimiento noreste
                     pos_col_mapa++;
                     pos_fila_mapa--;
                     break;
-                case "moveW":  // Movimiento oeste
+                case Mensajes.AGENT_COM_ACCION_MV_W:  // Movimiento oeste
                     pos_col_mapa--;
                     break;
-                case "moveE":  // Movimiento este
+                case Mensajes.AGENT_COM_ACCION_MV_E:  // Movimiento este
                     pos_col_mapa++;
                     break;
-                case "moveSW":  // Movimiento suroeste
+                case Mensajes.AGENT_COM_ACCION_MV_SW:  // Movimiento suroeste
                     pos_fila_mapa++;
                     pos_col_mapa--;
                     break;
-                case "moveS":  // Movimiento sur
+                case Mensajes.AGENT_COM_ACCION_MV_S:  // Movimiento sur
                     pos_fila_mapa++;
                     break;
-                case "moveSE":  // Movimiento sureste
+                case Mensajes.AGENT_COM_ACCION_MV_SE:  // Movimiento sureste
                     pos_fila_mapa++;
                     pos_col_mapa++;
                     break;
