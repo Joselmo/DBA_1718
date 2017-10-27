@@ -115,52 +115,49 @@ public class Cerebro {
      */
     private String findNextMove(){
         String nextMove;
-        //@todo Implementar el algoritmo de seleccion de siguiente paso
-        float entorno[][] = new float[3][3];
+        
+        float entorno[] = new float[9];
+        int iter_entorno = 0;
+        String direcciones[] = new String[9];
+        direcciones[0] = "moveNW";
+        direcciones[1] = "moveN";
+        direcciones[2] = "moveNE";
+        direcciones[3] = "moveW";
+        direcciones[4] = "center"; // ¿?¿?
+        direcciones[5] = "moveE";
+        direcciones[6] = "moveSW";
+        direcciones[7] = "moveS";
+        direcciones[8] = "moveSE";
 
+        //Almacenar en entorno los valores que detecta el radar
         for(int i=0 ; i<3 ; i++){
             for(int j=0 ; j<3 ; j++){
                 if(radarCar[i][j] == 1)
-                    entorno[i][j] = Float.POSITIVE_INFINITY;
+                    entorno[iter_entorno] = Float.POSITIVE_INFINITY;
                 else
-                    entorno[i][j] = scannerCar[i][j];
-            }
-        }
-        //@todo Buscar los indices del menor valor de la matriz entorno
-        int i, j;
-        /**/
-        if(i==0){ //norte
-            if(j==0){
-                //noroeste
-            } else if(j==1){
-                //norte
-            } else {
-                //noreste
+                    entorno[iter_entorno] = scannerCar[i][j];
+                iter_entorno++;
             }
         }
 
-        if(i==1){ //centro
-            if(j==0){
-                //oeste
-            } else if(j==1){
-                //centro
-            } else {
-                //este
+        /** @todo Incluir la parte de pulgarcito
+         *  Acceder al mapa desde pos_fila_mapa-1 y pos_col_mapa-1
+         *  hasta pos_fila_mapa+1 y pos_col_mapa+1 y modificar los valores
+         *  en el array entorno para el siguiente paso.
+         */
+
+
+        float menor_valor = Float.POSITIVE_INFINITY;
+        int direccion=4;
+        for(int i=0 ; i<9 ; i++){
+            if(entorno[i] < menor_valor){
+                menor_valor = entorno[i];
+                direccion = i;
             }
         }
 
-        if(i==2){ //sur
-            if(j==0){
-                //suroeste
-            } else if(j==1){
-                //sur
-            } else {
-                //sureste
-            }
-        }
-        /**/
 
-        nextMove = "moveSW";
+        nextMove = direcciones[direccion];
         return nextMove;
     }
 
