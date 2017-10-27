@@ -28,7 +28,6 @@ public class GugelCar extends SingleAgent{
         super(aid);
 
         controllerID = new AgentID("Girtab");
-        reachedGoal = false;
     }
 
     /**
@@ -46,7 +45,9 @@ public class GugelCar extends SingleAgent{
         jsonLogin.add("world", "map1");
         jsonLogin.add("radar", agentID);
         jsonLogin.add("scanner", agentID);
+
         numSensores = 2;
+        cerebro = new Cerebro(numSensores);
 
         sendMessage(jsonLogin.toString());
 
