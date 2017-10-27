@@ -4,7 +4,7 @@
  * Enum que contiene los mensajes de la aplicación
  * incluyendo los mensajes del agente.
  *
- * @author Jose
+ * @author Jose Luis Martínez Ortiz
  *
  *
  */
