@@ -94,6 +94,50 @@ public class Cerebro {
     private String findNextMove(){
         String nextMove;
         //@todo Implementar el algoritmo de seleccion de siguiente paso
+        float entorno[][] = new float[3][3];
+
+        for(int i=0 ; i<3 ; i++){
+            for(int j=0 ; j<3 ; j++){
+                if(radarCar[i][j] == 1)
+                    entorno[i][j] = Float.POSITIVE_INFINITY;
+                else
+                    entorno[i][j] = scannerCar[i][j];
+            }
+        }
+        //@todo Buscar los indices del menor valor de la matriz entorno
+        int i, j;
+        /**/
+        if(i==0){ //norte
+            if(j==0){
+                //noroeste
+            } else if(j==1){
+                //norte
+            } else {
+                //noreste
+            }
+        }
+
+        if(i==1){ //centro
+            if(j==0){
+                //oeste
+            } else if(j==1){
+                //centro
+            } else {
+                //este
+            }
+        }
+
+        if(i==2){ //sur
+            if(j==0){
+                //suroeste
+            } else if(j==1){
+                //sur
+            } else {
+                //sureste
+            }
+        }
+        /**/
+
         nextMove = "moveSW";
         return nextMove;
     }
