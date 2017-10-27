@@ -86,6 +86,28 @@ public class Cerebro {
     }
 
     /**
+     * Obtener la siguiente acción a realizar
+     *
+     * @author Diego Iáñez Ávila
+     * @return El comando a ejecutar
+     */
+    public String nextAction(){
+        // @todo Tener en cuenta el caso en el que estemos en el objetivo
+        String nextAction = Mensajes.AGENT_COM_ACCION_REFUEL;
+
+        // Comprobamos que no se haya alcanzado el objetivo y que se tenga bateria
+        if (!reachedGoal && bateriaCar > 2) {
+            nextAction = findNextMove();
+        }
+
+        if (bateriaCar <= 2){
+            nextAction = Mensajes.AGENT_COM_ACCION_REFUEL;
+        }
+
+        return nextAction;
+    }
+
+    /**
      * Decide cual es el siguiente movimiento del agente
      *
      * @author Ángel Píñar Rivas
@@ -143,12 +165,11 @@ public class Cerebro {
     }
 
     /**
-     * Envía la acción de repostar y actualiza nuestra batería
+     * Actualiza nuestra batería
      *
      * @author Ángel Píñar Rivas
      */
-    private void refuel(){
-        sendCommand("refuel");
+    public void refreshBatery(){
         bateriaCar = 100; // Como hemos repostado, la volvemos a poner al máximo
     }
 

@@ -75,28 +75,12 @@ public class GugelCar extends SingleAgent{
         while (!cerebro.hasReachedGoal()) {
             processPerception();
 
-            // Comprobamos que no se haya alcanzado el objetivo y que se tenga bateria
-            if (!reachedGoal && bateriaCar > 2) {
-                String nextMove = findNextMove();
-                makeMove(nextMove);
+            String nextAction = cerebro.nextAction();
 
-                /*
-                sendCommand("moveSW");
-                mapaMundo[pos_fila_mapa][pos_col_mapa] += 1; // Marcamos que hemos pasado por esa casilla
-                pos_fila_mapa -= 1; // Desplazmos la posición según el movimiento hecho
-                pos_col_mapa -= 1;
-                bateriaCar -= 1; // Reducimos la batería
-                */
-            }
-
-            if (bateriaCar <= 2){
+            if (nextAction.equals(Mensajes.AGENT_COM_ACCION_REFUEL))
                 refuel();
-
-                /*
-                sendCommand("refuel");
-                bateriaCar = 100; // Como hemos repostado, la volvemos a poner al máximo
-                */
-            }
+            else
+                makeMove(nextAction);
         }
 
         // Terminar sesión
@@ -109,9 +93,19 @@ public class GugelCar extends SingleAgent{
      * @author Andrés Molina López
      * @param nextMove indica cual es el string que se va a mandar al servidor
      */
-    public void makeMove(String nextMove) {
+    private void makeMove(String nextMove) {
         boolean resultadoMovimiento = sendCommand(nextMove);
         cerebro.refreshMemory(resultadoMovimiento, nextMove);
+    }
+
+    /**
+     * Recarga la bateria del coche
+     *
+     * @author Andrés Molina López
+     */
+    private void refuel(){
+        sendCommand(Mensajes.AGENT_COM_ACCION_REFUEL);
+        cerebro.refreshBatery();
     }
 
     /**
