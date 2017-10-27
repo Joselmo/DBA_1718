@@ -7,10 +7,11 @@ public class PruebaClass {
         GugelCar gugelCar;
 
         // Conectarse a la plataforma
-        AgentsConnection.connect("isg2.ugr.es", 6000, "Girtab", "Eridano", "Esquivel", false);
+        AgentsConnection.connect("isg2.ugr.es", 6000,
+                Mensajes.AGENT_HOST, Mensajes.AGENT_USER, Mensajes.AGENT_PASS, false);
 
         try {
-            gugelCar = new GugelCar(new AgentID("GugelCar"));
+            gugelCar = new GugelCar(new AgentID("GugelCarV2"));
 
             System.out.println("\n\n-------------------------------\n");
             gugelCar.start();

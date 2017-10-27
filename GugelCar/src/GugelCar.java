@@ -28,7 +28,7 @@ public class GugelCar extends SingleAgent{
     public GugelCar(AgentID aid) throws Exception {
         super(aid);
 
-        controllerID = new AgentID("GirtabV2");
+        controllerID = new AgentID("Girtab");
     }
 
     /**
