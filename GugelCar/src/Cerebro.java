@@ -136,30 +136,35 @@ public class Cerebro {
             }
         }
 
-        /**
+        /*
          *  Acceder al mapa desde pos_fila_mapa-1 y pos_col_mapa-1
          *  hasta pos_fila_mapa+1 y pos_col_mapa+1 y modificar los valores
          *  en el array entorno para el siguiente paso.
          */
         iter_entorno = 0;
-        for(int i=pos_fila_mapa-1; i < pos_fila_mapa+1; i++)
-            for(int j=pos_col_mapa-1; j < pos_col_mapa+1; j++){
-                entorno[iter_entorno] += mapaMundo[i][j] * 1 ; // TODO arreglar valor a pelo
+        for(int i=-1; i < 2; i++) {
+            for (int j = - 1; j < 2; j++) {
+                entorno[iter_entorno] += mapaMundo[pos_fila_mapa + i][pos_col_mapa + j] * 50; // TODO arreglar valor a pelo
 
                 iter_entorno++;
             }
+        }
 
-
+        System.out.print("Vector interno: {");
 
         float menor_valor = Float.POSITIVE_INFINITY;
         int direccion=4;
+
         for(int i=0 ; i < 9 ; i++){
-            if(entorno[i] < menor_valor){
+            System.out.print(entorno[i] + ", ");
+
+            if(entorno[i] < menor_valor && i != 4){
                 menor_valor = entorno[i];
                 direccion = i;
             }
         }
 
+        System.out.println("}");
 
         nextMove = direcciones[direccion];
         return nextMove;

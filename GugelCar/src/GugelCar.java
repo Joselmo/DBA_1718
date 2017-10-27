@@ -38,8 +38,8 @@ public class GugelCar extends SingleAgent{
      */
     @Override
     public void init(){
-        // Loguearse en el mapa 1
-        mapa = "map1";
+        // Loguearse en el mapa
+        mapa = "map6";
         JsonValue agentID = Json.value(getAid().toString());
 
         JsonObject jsonLogin = Json.object();
@@ -74,19 +74,27 @@ public class GugelCar extends SingleAgent{
     public void execute(){
         // Cuando esté implementado de verdad, la condición de salida del bucle no será esta
         // y por lo tanto no se comprobará dos veces como ahora.
-        while (!cerebro.hasReachedGoal()) {
+        int it = 0;
+        boolean salir = false;
+
+        while (!salir) {
             processPerception();
 
-            if(!cerebro.hasReachedGoal()) {
+            if(!cerebro.hasReachedGoal() && it < 1000) {
 
                 String nextAction = cerebro.nextAction();
-
+                System.out.println(nextAction);
 
                 if (nextAction.equals(Mensajes.AGENT_COM_ACCION_REFUEL))
                     refuel();
                 else
                     makeMove(nextAction);
             }
+            else{
+                salir = true;
+            }
+
+            ++it;
         }
 
         // Terminar sesión

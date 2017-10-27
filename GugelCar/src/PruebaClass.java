@@ -11,7 +11,7 @@ public class PruebaClass {
                 Mensajes.AGENT_HOST, Mensajes.AGENT_USER, Mensajes.AGENT_PASS, false);
 
         try {
-            gugelCar = new GugelCar(new AgentID("GugelCarV2"));
+            gugelCar = new GugelCar(new AgentID("GugelCarV3"));
 
             System.out.println("\n\n-------------------------------\n");
             gugelCar.start();
