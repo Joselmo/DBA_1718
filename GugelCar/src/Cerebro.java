@@ -4,7 +4,7 @@ import com.eclipsesource.json.JsonObject;
 public class Cerebro {
     //DATOS MIEMBROS
     // Elementos para la percepcion inmediata del agente
-    private int numSensores = 2;                        // Sensores que se estan utilizando en el momento
+    private int numSensores;                        // Sensores que se estan utilizando en el momento
     private int [][] radarCar = new int[3][3];          // Matriz que representa la percepcion del sensor radar
     private float [][] scannerCar = new float[3][3];    // Matriz que representa la percepcion del sensor scanner
     private int bateriaCar = 0;                         // Porcentaje de carga de la bateria
@@ -22,8 +22,8 @@ public class Cerebro {
      *
      * @author Andres Molina Lopez
      */
-    public Cerebro(){
-
+    public Cerebro(int numSens){
+        numSensores = numSens;
     }
 
     /**
