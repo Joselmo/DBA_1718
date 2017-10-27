@@ -77,7 +77,7 @@ public class GugelCar extends SingleAgent{
             // Comprobamos que no se haya alcanzado el objetivo y que se tenga bateria
             if (!reachedGoal && bateriaCar > 2) {
                 String nextMove = findNextMove();
-                moveTo(nextMove);
+                makeMove(nextMove);
 
                 /*
                 sendCommand("moveSW");
