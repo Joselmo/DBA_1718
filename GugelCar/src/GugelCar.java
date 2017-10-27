@@ -109,9 +109,19 @@ public class GugelCar extends SingleAgent{
      * @author Andrés Molina López
      * @param nextMove indica cual es el string que se va a mandar al servidor
      */
-    public void makeMove(String nextMove) {
+    private void makeMove(String nextMove) {
         boolean resultadoMovimiento = sendCommand(nextMove);
         cerebro.refreshMemory(resultadoMovimiento, nextMove);
+    }
+
+    /**
+     * Recarga la bateria del coche
+     *
+     * @author Andrés Molina López
+     */
+    private void refuel(){
+        sendCommand(Mensajes.AGENT_COM_ACCION_REFUEL);
+        cerebro.refreshBatery();
     }
 
     /**

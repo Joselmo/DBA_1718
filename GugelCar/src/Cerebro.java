@@ -103,8 +103,7 @@ public class Cerebro {
      *
      * @author Ángel Píñar Rivas
      */
-    private void refuel(){
-        sendCommand("refuel");
+    public void refreshBatery(){
         bateriaCar = 100; // Como hemos repostado, la volvemos a poner al máximo
     }
 
