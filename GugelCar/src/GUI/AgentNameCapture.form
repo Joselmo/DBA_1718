@@ -76,6 +76,18 @@
             </constraints>
             <properties>
               <editable value="false"/>
+              <model>
+                <item value="map1"/>
+                <item value="map2"/>
+                <item value="map3"/>
+                <item value="map4"/>
+                <item value="map5"/>
+                <item value="map6"/>
+                <item value="map7"/>
+                <item value="map8"/>
+                <item value="map9"/>
+                <item value="map10"/>
+              </model>
             </properties>
           </component>
         </children>

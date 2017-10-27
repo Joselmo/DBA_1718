@@ -28,12 +28,12 @@ public class AgentNameCapture extends JDialog {
             }
         });
 
-        // Configurar mapSelectionBox
-        mapSelectionBox.addItem(makeObj("map1")); mapSelectionBox.addItem(makeObj("map2"));
-        mapSelectionBox.addItem(makeObj("map3")); mapSelectionBox.addItem(makeObj("map4"));
-        mapSelectionBox.addItem(makeObj("map5")); mapSelectionBox.addItem(makeObj("map6"));
-        mapSelectionBox.addItem(makeObj("map7")); mapSelectionBox.addItem(makeObj("map8"));
-        mapSelectionBox.addItem(makeObj("map9")); mapSelectionBox.addItem(makeObj("map10"));
+//        // Configurar mapSelectionBox
+//        mapSelectionBox.addItem(makeObj("map1")); mapSelectionBox.addItem(makeObj("map2"));
+//        mapSelectionBox.addItem(makeObj("map3")); mapSelectionBox.addItem(makeObj("map4"));
+//        mapSelectionBox.addItem(makeObj("map5")); mapSelectionBox.addItem(makeObj("map6"));
+//        mapSelectionBox.addItem(makeObj("map7")); mapSelectionBox.addItem(makeObj("map8"));
+//        mapSelectionBox.addItem(makeObj("map9")); mapSelectionBox.addItem(makeObj("map10"));
 
         // call onCancel() when cross is clicked
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
