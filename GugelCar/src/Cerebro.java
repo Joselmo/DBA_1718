@@ -99,7 +99,7 @@ public class Cerebro {
     }
 
     /**
-     * Envía la acción de repostar y actualiza nuestra batería
+     * Actualiza nuestra batería
      *
      * @author Ángel Píñar Rivas
      */
