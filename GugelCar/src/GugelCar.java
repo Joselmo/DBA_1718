@@ -8,13 +8,15 @@ import es.upv.dsic.gti_ia.core.SingleAgent;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class GugelCar extends SingleAgent{
 
     private String password;
     private AgentID controllerID;
-    private boolean reachedGoal; //@todo borrar esta variable
     private Cerebro cerebro;
+    private int numSensores;
+
     /**
      * Constructor
      *
@@ -44,6 +46,7 @@ public class GugelCar extends SingleAgent{
         jsonLogin.add("world", "map1");
         jsonLogin.add("radar", agentID);
         jsonLogin.add("scanner", agentID);
+        numSensores = 2;
 
         sendMessage(jsonLogin.toString());
 
@@ -68,7 +71,7 @@ public class GugelCar extends SingleAgent{
     public void execute(){
         // Cuando esté implementado de verdad, la condición de salida del bucle no será esta
         // y por lo tanto no se comprobará dos veces como ahora.
-        while (!reachedGoal) {
+        while (!cerebro.hasReachedGoal()) {
             processPerception();
 
             // Comprobamos que no se haya alcanzado el objetivo y que se tenga bateria
@@ -194,5 +197,27 @@ public class GugelCar extends SingleAgent{
         System.out.println("Recibido mensaje " + inbox.getContent());
 
         return Json.parse(inbox.getContent()).asObject();
+    }
+
+    /**
+     * Iniciar el procesamiento de la percepción
+     *
+     * @author Diego Iáñez Ávila
+     */
+    private void processPerception(){
+        try {
+            // Recibimos los mensajes del servidor en orden
+            ArrayList<JsonObject> messages = new ArrayList<>();
+
+            for (int i = 0; i < numSensores; ++i) {
+                JsonObject msg = receiveJson();
+                messages.add(msg);
+            }
+
+            cerebro.processPerception(messages);
+
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

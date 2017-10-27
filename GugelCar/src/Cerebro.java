@@ -1,6 +1,8 @@
 import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
 
+import java.util.ArrayList;
+
 public class Cerebro {
     //DATOS MIEMBROS
     // Elementos para la percepcion inmediata del agente
@@ -16,6 +18,8 @@ public class Cerebro {
     private int pos_fila_mapa = 5000;
     private int pos_col_mapa = 5000;
 
+    private boolean reachedGoal;
+
     // METODOS
     /**
      * Constructor del cerebro
@@ -23,70 +27,60 @@ public class Cerebro {
      * @author Andres Molina Lopez
      */
     public Cerebro(){
-
+        reachedGoal = false;
     }
 
     /**
      * Recibe y procesa la percepción del agente
      *
-     * @author Andrés Molina López
+     * @author Andrés Molina López, Diego Iáñez Ávila
      */
-    private void processPerception(){
-        try {
-            // Recibimos los mensajes del servidor en orden
-            int sensoresRecibidos = 0;
-            while(sensoresRecibidos < numSensores){
-                JsonObject msg = receiveJson();
-                // Comprobamos si se está usando el radar y en caso afirmativo rellenamos su matriz de percepción
-                if(msg.get("radar") != null) {
-                    JsonArray radar = msg.get("radar").asArray();
-                    int pos = 6;
-                    for (int i=0; i<3; i++){
-                        for (int j=0; j<3; j++){
-                            radarCar[i][j] = radar.get(pos).asInt();
-                            pos++;
-                        }
-                        pos += 2;
+    public void processPerception(ArrayList<JsonObject> sensores){
+        for (JsonObject msg : sensores){
+            // Comprobamos si se está usando el radar y en caso afirmativo rellenamos su matriz de percepción
+            if(msg.get("radar") != null) {
+                JsonArray radar = msg.get("radar").asArray();
+                int pos = 6;
+                for (int i=0; i<3; i++){
+                    for (int j=0; j<3; j++){
+                        radarCar[i][j] = radar.get(pos).asInt();
+                        pos++;
                     }
+                    pos += 2;
                 }
+            }
 
-                // Comprobamos si se está usando el scanner y en caso afirmativo rellenamos su matriz de percepción
-                if (msg.get("scanner") != null){
-                    JsonArray scanner = msg.get("scanner").asArray();
-                    int pos = 6;
-                    for (int i=0; i<3; i++){
-                        for (int j=0; j<3; j++){
-                            scannerCar[i][j] = scanner.get(pos).asFloat();
-                            pos++;
-                        }
-                        pos += 2;
+            // Comprobamos si se está usando el scanner y en caso afirmativo rellenamos su matriz de percepción
+            if (msg.get("scanner") != null){
+                JsonArray scanner = msg.get("scanner").asArray();
+                int pos = 6;
+                for (int i=0; i<3; i++){
+                    for (int j=0; j<3; j++){
+                        scannerCar[i][j] = scanner.get(pos).asFloat();
+                        pos++;
                     }
+                    pos += 2;
                 }
-
-                sensoresRecibidos++;
             }
+        }
 
-            /*  POR SI ALGUIEN QUIERE VER COMO SE ACTUALIZAN LAS PERCEPCIONES
-            // Comprobación del contenido de radar
-            System.out.println("\nContenido del radar: \n");
-            for (int i=0; i<3; i++){
-                System.out.println(radarCar[i][0] + " " + radarCar[i][1] + " " + radarCar[i][2] + "\n");
-            }
+        /*  POR SI ALGUIEN QUIERE VER COMO SE ACTUALIZAN LAS PERCEPCIONES
+        // Comprobación del contenido de radar
+        System.out.println("\nContenido del radar: \n");
+        for (int i=0; i<3; i++){
+            System.out.println(radarCar[i][0] + " " + radarCar[i][1] + " " + radarCar[i][2] + "\n");
+        }
 
-            // Comprobación del contenido de scanner
-            System.out.println("\nContenido del scanner: \n");
-            for (int i=0; i<3; i++){
-                System.out.println(scannerCar[i][0] + "     " + scannerCar[i][1] + "     " + scannerCar[i][2] + "     " + "\n");
-            }
-            */
+        // Comprobación del contenido de scanner
+        System.out.println("\nContenido del scanner: \n");
+        for (int i=0; i<3; i++){
+            System.out.println(scannerCar[i][0] + "     " + scannerCar[i][1] + "     " + scannerCar[i][2] + "     " + "\n");
+        }
+        */
 
-            // Comprobamos si la posicion actual del coche es el objetivo
-            if (radarCar[1][1] == 2) {
-                reachedGoal = true;
-            }
-
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        // Comprobamos si la posicion actual del coche es el objetivo
+        if (radarCar[1][1] == 2) {
+            reachedGoal = true;
         }
     }
 
@@ -166,5 +160,9 @@ public class Cerebro {
         else {
             System.err.println("Movimiento no permitido");
         }
+    }
+
+    public boolean hasReachedGoal() {
+        return reachedGoal;
     }
 }
