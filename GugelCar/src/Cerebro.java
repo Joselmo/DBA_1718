@@ -32,11 +32,13 @@ public class Cerebro {
     }
 
     /**
-     * Recibe y procesa la percepción del agente
+     * Recibe y procesa la percepción del agente de los sensores y la almacena en los
+     * sensores locales del cerebro
      *
      * @author Andrés Molina López, Diego Iáñez Ávila, Jose Luis Martínez Ortiz
      */
     public void processPerception(ArrayList<JsonObject> sensores){
+
 
         for (JsonObject msg : sensores){
             // Comprobamos si se está usando el radar y en caso afirmativo rellenamos su matriz de percepción
@@ -89,21 +91,14 @@ public class Cerebro {
     /**
      * Obtener la siguiente acción a realizar
      *
-     * @author Diego Iáñez Ávila
+     * @author Diego Iáñez Ávila, Jose Luis Martínez Ortiz
      * @return El comando a ejecutar
      */
     public String nextAction(){
-        // @todo Tener en cuenta el caso en el que estemos en el objetivo
         String nextAction = Mensajes.AGENT_COM_ACCION_REFUEL;
 
-        // Comprobamos que no se haya alcanzado el objetivo y que se tenga bateria
-        if (!reachedGoal && bateriaCar > 2) {
-            nextAction = findNextMove();
-        }
-
-        if (bateriaCar <= 2){
-            nextAction = Mensajes.AGENT_COM_ACCION_REFUEL;
-        }
+        if(!reachedGoal && bateriaCar > 2)
+              nextAction = findNextMove();
 
         return nextAction;
     }
@@ -111,7 +106,7 @@ public class Cerebro {
     /**
      * Decide cual es el siguiente movimiento del agente
      *
-     * @author Ángel Píñar Rivas
+     * @author Ángel Píñar Rivas, Jose Luis Martínez Ortiz
      * @return String con la siguiente dirección a la que ir
      */
     private String findNextMove(){
@@ -124,7 +119,7 @@ public class Cerebro {
         direcciones[1] = Mensajes.AGENT_COM_ACCION_MV_N;
         direcciones[2] = Mensajes.AGENT_COM_ACCION_MV_NE;
         direcciones[3] = Mensajes.AGENT_COM_ACCION_MV_W;
-        direcciones[4] = "center"; // ¿?¿?
+        direcciones[4] = "";
         direcciones[5] = Mensajes.AGENT_COM_ACCION_MV_E;
         direcciones[6] = Mensajes.AGENT_COM_ACCION_MV_SW;
         direcciones[7] = Mensajes.AGENT_COM_ACCION_MV_S;
@@ -141,16 +136,24 @@ public class Cerebro {
             }
         }
 
-        /** @todo Incluir la parte de pulgarcito
+        /**
          *  Acceder al mapa desde pos_fila_mapa-1 y pos_col_mapa-1
          *  hasta pos_fila_mapa+1 y pos_col_mapa+1 y modificar los valores
          *  en el array entorno para el siguiente paso.
          */
+        iter_entorno = 0;
+        for(int i=pos_fila_mapa-1; i < pos_fila_mapa+1; i++)
+            for(int j=pos_col_mapa-1; j < pos_col_mapa+1; j++){
+                entorno[iter_entorno] += mapaMundo[i][j] * 1 ; // TODO arreglar valor a pelo
+
+                iter_entorno++;
+            }
+
 
 
         float menor_valor = Float.POSITIVE_INFINITY;
         int direccion=4;
-        for(int i=0 ; i<9 ; i++){
+        for(int i=0 ; i < 9 ; i++){
             if(entorno[i] < menor_valor){
                 menor_valor = entorno[i];
                 direccion = i;

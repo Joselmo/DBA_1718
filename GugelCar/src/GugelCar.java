@@ -28,7 +28,7 @@ public class GugelCar extends SingleAgent{
     public GugelCar(AgentID aid) throws Exception {
         super(aid);
 
-        controllerID = new AgentID("Girtab");
+        controllerID = new AgentID("GirtabV2");
     }
 
     /**
@@ -68,7 +68,7 @@ public class GugelCar extends SingleAgent{
     /**
      * Cuerpo del agente
      *
-     * @author Diego Iáñez Ávila, Andrés Molina López
+     * @author Diego Iáñez Ávila, Andrés Molina López, Jose Luis Martínez Ortiz
      */
     @Override
     public void execute(){
@@ -77,12 +77,16 @@ public class GugelCar extends SingleAgent{
         while (!cerebro.hasReachedGoal()) {
             processPerception();
 
-            String nextAction = cerebro.nextAction();
+            if(!cerebro.hasReachedGoal()) {
 
-            if (nextAction.equals(Mensajes.AGENT_COM_ACCION_REFUEL))
-                refuel();
-            else
-                makeMove(nextAction);
+                String nextAction = cerebro.nextAction();
+
+
+                if (nextAction.equals(Mensajes.AGENT_COM_ACCION_REFUEL))
+                    refuel();
+                else
+                    makeMove(nextAction);
+            }
         }
 
         // Terminar sesión
@@ -96,8 +100,10 @@ public class GugelCar extends SingleAgent{
      * @param nextMove indica cual es el string que se va a mandar al servidor
      */
     private void makeMove(String nextMove) {
-        boolean resultadoMovimiento = sendCommand(nextMove);
-        cerebro.refreshMemory(resultadoMovimiento, nextMove);
+        if(!nextMove.isEmpty()) {
+            boolean resultadoMovimiento = sendCommand(nextMove);
+            cerebro.refreshMemory(resultadoMovimiento, nextMove);
+        }
     }
 
     /**
