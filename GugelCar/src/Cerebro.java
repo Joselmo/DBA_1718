@@ -116,17 +116,17 @@ public class Cerebro {
     /**
      * Envia el siguiente movimiento, actualiza el mapa interno del agente y reduce la bateria
      *
-     * @author Ángel Píñar Rivas, David Vargas Carrillo
+     * @author Ángel Píñar Rivas, David Vargas Carrillo, Andrés Molina López
+     * @param confirmacion indica si el resultado del movimiento fue válido
+     * @param movimiento indica hacia donde se ha realizado el movimiento
      */
-    private void moveTo(String nextMove){ //PASAR SOLO BOOLEAN
-        boolean permitido = sendCommand(nextMove); //PARA OTRO METODO EN GUGELCAR
-
-        if (permitido) {
+    private void refreshMemory(boolean confirmacion, String movimiento){
+        if (confirmacion) {
             // Se marca en la memoria que hemos pasado por la casilla
             mapaMundo[pos_fila_mapa][pos_col_mapa]++;
 
             // Se desplaza la posicion en la matriz memoria segun el movimiento decidido
-            switch (nextMove) {
+            switch (movimiento) {
                 case "moveNW":  // Movimiento noroeste
                     pos_fila_mapa--;
                     pos_col_mapa--;
