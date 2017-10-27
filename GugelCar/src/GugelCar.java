@@ -50,7 +50,6 @@ public class GugelCar extends SingleAgent{
     @Override
     public void init(){
         // Loguearse en el mapa 1
-        JsonValue map = Json.value("map1");
         JsonValue agentID = Json.value(getAid().toString());
 
         JsonObject jsonLogin = Json.object();
