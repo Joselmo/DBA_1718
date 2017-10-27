@@ -115,7 +115,7 @@ public class Cerebro {
      * @param confirmacion indica si el resultado del movimiento fue válido
      * @param movimiento indica hacia donde se ha realizado el movimiento
      */
-    private void refreshMemory(boolean confirmacion, String movimiento){
+    public void refreshMemory(boolean confirmacion, String movimiento){
         if (confirmacion) {
             // Se marca en la memoria que hemos pasado por la casilla
             mapaMundo[pos_fila_mapa][pos_col_mapa]++;
