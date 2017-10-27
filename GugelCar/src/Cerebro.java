@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class Cerebro {
     //DATOS MIEMBROS
     // Elementos para la percepcion inmediata del agente
-    private int numSensores = 2;                        // Sensores que se estan utilizando en el momento
+    private int numSensores;                        // Sensores que se estan utilizando en el momento
     private int [][] radarCar = new int[3][3];          // Matriz que representa la percepcion del sensor radar
     private float [][] scannerCar = new float[3][3];    // Matriz que representa la percepcion del sensor scanner
     private int bateriaCar = 0;                         // Porcentaje de carga de la bateria
@@ -26,8 +26,9 @@ public class Cerebro {
      *
      * @author Andres Molina Lopez
      */
-    public Cerebro(){
+    public Cerebro(int numSens){
         reachedGoal = false;
+        numSensores = numSens;
     }
 
     /**
@@ -110,17 +111,17 @@ public class Cerebro {
     /**
      * Envia el siguiente movimiento, actualiza el mapa interno del agente y reduce la bateria
      *
-     * @author Ángel Píñar Rivas, David Vargas Carrillo
+     * @author Ángel Píñar Rivas, David Vargas Carrillo, Andrés Molina López
+     * @param confirmacion indica si el resultado del movimiento fue válido
+     * @param movimiento indica hacia donde se ha realizado el movimiento
      */
-    private void moveTo(String nextMove){ //PASAR SOLO BOOLEAN
-        boolean permitido = sendCommand(nextMove); //PARA OTRO METODO EN GUGELCAR
-
-        if (permitido) {
+    private void refreshMemory(boolean confirmacion, String movimiento){
+        if (confirmacion) {
             // Se marca en la memoria que hemos pasado por la casilla
             mapaMundo[pos_fila_mapa][pos_col_mapa]++;
 
             // Se desplaza la posicion en la matriz memoria segun el movimiento decidido
-            switch (nextMove) {
+            switch (movimiento) {
                 case "moveNW":  // Movimiento noroeste
                     pos_fila_mapa--;
                     pos_col_mapa--;
