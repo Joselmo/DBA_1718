@@ -10,8 +10,9 @@ public class PruebaClass {
         // Ventana de captura de nombre y mapa
         AgentNameCapture newCapture = new AgentNameCapture();
         newCapture.setVisible(true);
-        System.out.println("Mapa seleccionado: " + newCapture.getSelectedMap());
-        System.out.println("Nombre del agente: " + newCapture.getNombreAgente());
+
+        String mapaSeleccionado = newCapture.getMapaSeleccionado();
+        String nombreAgente = newCapture.getNombreAgente();
 
         // Conectarse a la plataforma
         AgentsConnection.connect("isg2.ugr.es", 6000,
@@ -19,7 +20,7 @@ public class PruebaClass {
 
         // @todo implementar mecanismos para parar la ejecucion en caso de que se reciban erores tipo BAD_MAP
         try {
-            gugelCar = new GugelCar(new AgentID("GugelCarV3"));
+            gugelCar = new GugelCar(new AgentID(nombreAgente), mapaSeleccionado);
 
             System.out.println("\n\n-------------------------------\n");
             gugelCar.start();

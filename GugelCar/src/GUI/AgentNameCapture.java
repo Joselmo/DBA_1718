@@ -88,7 +88,7 @@ public class AgentNameCapture extends JDialog {
      * @author David Vargas Carrillo
      * @return String con el mapa seleccionado, con el formato "mapX"
      */
-    public Object getSelectedMap() {
+    public String getMapaSeleccionado() {
         return mapaSeleccionado;
     }
 
