@@ -1,3 +1,4 @@
+import GUI.AgentNameCapture;
 import es.upv.dsic.gti_ia.core.AgentID;
 import es.upv.dsic.gti_ia.core.AgentsConnection;
 
@@ -6,11 +7,19 @@ public class PruebaClass {
     public static void main(String[] args) {
         GugelCar gugelCar;
 
-        // Conectarse a la plataforma
-        AgentsConnection.connect("isg2.ugr.es", 6000, "Girtab", "Eridano", "Esquivel", false);
+        // Ventana de captura de nombre y mapa
+        AgentNameCapture newCapture = new AgentNameCapture();
+        newCapture.setVisible(true);
+        System.out.println("Mapa seleccionado: " + newCapture.getSelectedMap());
+        System.out.println("Nombre del agente: " + newCapture.getNombreAgente());
 
+        // Conectarse a la plataforma
+        AgentsConnection.connect("isg2.ugr.es", 6000,
+                Mensajes.AGENT_HOST, Mensajes.AGENT_USER, Mensajes.AGENT_PASS, false);
+
+        // @todo implementar mecanismos para parar la ejecucion en caso de que se reciban erores tipo BAD_MAP
         try {
-            gugelCar = new GugelCar(new AgentID("GugelCar"));
+            gugelCar = new GugelCar(new AgentID("GugelCarV3"));
 
             System.out.println("\n\n-------------------------------\n");
             gugelCar.start();

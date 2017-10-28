@@ -8,17 +8,20 @@ import es.upv.dsic.gti_ia.core.SingleAgent;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class GugelCar extends SingleAgent{
 
     private String password;
     private AgentID controllerID;
-    private boolean reachedGoal; //@todo borrar esta variable
     private Cerebro cerebro;
+    private int numSensores;
+    private String mapa;
+
     /**
      * Constructor
      *
-     * @author Diego Iáñez Ávila
+     * @author Diego Iáñez Ávila, David Vargas Carrillo
      * @param aid ID del agente
      * @throws Exception si no puede crear el agente
      */
@@ -26,24 +29,54 @@ public class GugelCar extends SingleAgent{
         super(aid);
 
         controllerID = new AgentID("Girtab");
-        reachedGoal = false;
+        // Se asigna un mapa por defecto
+        mapa = "map1";
+    }
+
+    /**
+     * Constructor
+     *
+     * @author David Vargas Carrillo
+     * @param aid ID del agente
+     * @param unMapa mapa en el que actuar
+     * @throws Exception si no puede crear el agente
+     */
+    public GugelCar(AgentID aid, String unMapa) throws Exception {
+        super(aid);
+
+        controllerID = new AgentID("Girtab");
+        // Se asigna un mapa por defecto
+        mapa = unMapa;
+    }
+
+    /**
+     * Metodo SET que establece el mapa en el que actuar
+     *
+     * @author David Vargas Carrillo
+     * @param unMapa mapa en el que actuar
+     */
+    public void SetMapa(String unMapa) {
+        mapa = unMapa;
     }
 
     /**
      * Método de inicialización del agente
      *
-     * @author Diego Iáñez Ávila
+     * @author Diego Iáñez Ávila, Jose Luis Martínez Ortiz
      */
     @Override
     public void init(){
-        // Loguearse en el mapa 1
+        // Loguearse en el mapa
         JsonValue agentID = Json.value(getAid().toString());
 
         JsonObject jsonLogin = Json.object();
-        jsonLogin.add("command", "login");
-        jsonLogin.add("world", "map1");
-        jsonLogin.add("radar", agentID);
-        jsonLogin.add("scanner", agentID);
+        jsonLogin.add(Mensajes.AGENT_COM_COMMAND, Mensajes.AGENT_COM_LOGIN);
+        jsonLogin.add(Mensajes.AGENT_COM_WORLD, mapa);
+        jsonLogin.add(Mensajes.AGENT_COM_SENSOR_RADAR, agentID);
+        jsonLogin.add(Mensajes.AGENT_COM_SENSOR_SCANNER, agentID);
+
+        numSensores = 2;
+        cerebro = new Cerebro(numSensores);
 
         sendMessage(jsonLogin.toString());
 
@@ -52,7 +85,7 @@ public class GugelCar extends SingleAgent{
             password = null;
             while(password == null) {
                 JsonObject answer = receiveJson();
-                password = answer.getString("result", null);
+                password = answer.getString(Mensajes.AGENT_COM_RESULT, null);
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -62,37 +95,33 @@ public class GugelCar extends SingleAgent{
     /**
      * Cuerpo del agente
      *
-     * @author Diego Iáñez Ávila, Andrés Molina López
+     * @author Diego Iáñez Ávila, Andrés Molina López, Jose Luis Martínez Ortiz
      */
     @Override
     public void execute(){
         // Cuando esté implementado de verdad, la condición de salida del bucle no será esta
         // y por lo tanto no se comprobará dos veces como ahora.
-        while (!reachedGoal) {
+        int it = 0;
+        boolean salir = false;
+
+        while (!salir) {
             processPerception();
 
-            // Comprobamos que no se haya alcanzado el objetivo y que se tenga bateria
-            if (!reachedGoal && bateriaCar > 2) {
-                String nextMove = findNextMove();
-                makeMove(nextMove);
+            if(!cerebro.hasReachedGoal() && it < 1000) {
 
-                /*
-                sendCommand("moveSW");
-                mapaMundo[pos_fila_mapa][pos_col_mapa] += 1; // Marcamos que hemos pasado por esa casilla
-                pos_fila_mapa -= 1; // Desplazmos la posición según el movimiento hecho
-                pos_col_mapa -= 1;
-                bateriaCar -= 1; // Reducimos la batería
-                */
+                String nextAction = cerebro.nextAction();
+                System.out.println(nextAction);
+
+                if (nextAction.equals(Mensajes.AGENT_COM_ACCION_REFUEL))
+                    refuel();
+                else
+                    makeMove(nextAction);
+            }
+            else{
+                salir = true;
             }
 
-            if (bateriaCar <= 2){
-                refuel();
-
-                /*
-                sendCommand("refuel");
-                bateriaCar = 100; // Como hemos repostado, la volvemos a poner al máximo
-                */
-            }
+            ++it;
         }
 
         // Terminar sesión
@@ -105,9 +134,21 @@ public class GugelCar extends SingleAgent{
      * @author Andrés Molina López
      * @param nextMove indica cual es el string que se va a mandar al servidor
      */
-    public void makeMove(String nextMove) {
-        boolean resultadoMovimiento = sendCommand(nextMove);
-        cerebro.refreshMemory(resultadoMovimiento, nextMove);
+    private void makeMove(String nextMove) {
+        if(!nextMove.isEmpty()) {
+            boolean resultadoMovimiento = sendCommand(nextMove);
+            cerebro.refreshMemory(resultadoMovimiento, nextMove);
+        }
+    }
+
+    /**
+     * Recarga la bateria del coche
+     *
+     * @author Andrés Molina López
+     */
+    private void refuel(){
+        sendCommand(Mensajes.AGENT_COM_ACCION_REFUEL);
+        cerebro.refreshBatery();
     }
 
     /**
@@ -119,13 +160,13 @@ public class GugelCar extends SingleAgent{
         // Desloguearse
         System.out.println("Terminando sesión");
 
-        sendCommand("logout");
+        sendCommand(Mensajes.AGENT_COM_LOGOUT);
         processPerception();
 
         try{
             System.out.println("Recibiendo traza");
             JsonObject injson = receiveJson();
-            JsonArray ja = injson.get("trace").asArray();
+            JsonArray ja = injson.get(Mensajes.AGENT_COM_TRACE).asArray();
 
             byte data[] = new byte[ja.size()];
 
@@ -161,7 +202,7 @@ public class GugelCar extends SingleAgent{
     /**
      * Envía un comando al controlador
      *
-     * @author Diego Iáñez Ávila
+     * @author Diego Iáñez Ávila, Jose Luis Martínez Ortiz
      * @param command Comando a enviar
      * @return true si el controlador respondió con OK al comando
      */
@@ -169,21 +210,16 @@ public class GugelCar extends SingleAgent{
         boolean success = true;
 
         JsonObject jsonCommand = Json.object();
-        jsonCommand.add("command", command);
-        jsonCommand.add("key", password);
+        jsonCommand.add(Mensajes.AGENT_COM_COMMAND, command);
+        jsonCommand.add(Mensajes.AGENT_COM_KEY, password);
 
-        ACLMessage outbox = new ACLMessage();
-        outbox.setSender(getAid());
-        outbox.setReceiver(controllerID);
-        outbox.setContent(jsonCommand.toString());
-
-        send(outbox);
+        sendMessage(jsonCommand.toString());
 
         try{
             JsonObject answer = receiveJson();
-            String result = answer.getString("result", "BAD_MESSAGE");
+            String result = answer.getString(Mensajes.AGENT_COM_RESULT, Mensajes.AGENT_COM_BADMESSAGE);
 
-            if (!result.equals("OK"))
+            if (!result.equals(Mensajes.AGENT_COM_OK))
                 success = false;
 
         } catch (InterruptedException e){
@@ -205,5 +241,27 @@ public class GugelCar extends SingleAgent{
         System.out.println("Recibido mensaje " + inbox.getContent());
 
         return Json.parse(inbox.getContent()).asObject();
+    }
+
+    /**
+     * Iniciar el procesamiento de la percepción
+     *
+     * @author Diego Iáñez Ávila
+     */
+    private void processPerception(){
+        try {
+            // Recibimos los mensajes del servidor en orden
+            ArrayList<JsonObject> messages = new ArrayList<>();
+
+            for (int i = 0; i < numSensores; ++i) {
+                JsonObject msg = receiveJson();
+                messages.add(msg);
+            }
+
+            cerebro.processPerception(messages);
+
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

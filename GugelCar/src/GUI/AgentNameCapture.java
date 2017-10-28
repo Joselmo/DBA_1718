@@ -2,15 +2,22 @@ package GUI;
 
 import javax.swing.*;
 import java.awt.event.*;
-import java.util.Vector;
 
 public class AgentNameCapture extends JDialog {
     private JPanel contentPane;
     private JButton loginButton;
     private JButton buttonCancel;
-    private JFormattedTextField agentNameField;
-    private JComboBox mapSelectionBox;
+    private JFormattedTextField nombreAgenteField;
+    private JComboBox<String> mapSelectionBox;
 
+    private String nombreAgente;
+    private String mapaSeleccionado;
+
+    /**
+     * Constructor
+     *
+     * @author David Vargas Carrillo
+     */
     public AgentNameCapture() {
         setContentPane(contentPane);
         setModal(true);
@@ -28,12 +35,12 @@ public class AgentNameCapture extends JDialog {
             }
         });
 
-//        // Configurar mapSelectionBox
-//        mapSelectionBox.addItem(makeObj("map1")); mapSelectionBox.addItem(makeObj("map2"));
-//        mapSelectionBox.addItem(makeObj("map3")); mapSelectionBox.addItem(makeObj("map4"));
-//        mapSelectionBox.addItem(makeObj("map5")); mapSelectionBox.addItem(makeObj("map6"));
-//        mapSelectionBox.addItem(makeObj("map7")); mapSelectionBox.addItem(makeObj("map8"));
-//        mapSelectionBox.addItem(makeObj("map9")); mapSelectionBox.addItem(makeObj("map10"));
+        // Adicion de los mapas disponibles
+        mapSelectionBox.addItem("map1"); mapSelectionBox.addItem("map2");
+        mapSelectionBox.addItem("map3"); mapSelectionBox.addItem("map4");
+        mapSelectionBox.addItem("map5"); mapSelectionBox.addItem("map6");
+        mapSelectionBox.addItem("map7"); mapSelectionBox.addItem("map8");
+        mapSelectionBox.addItem("map9"); mapSelectionBox.addItem("map10");
 
         // call onCancel() when cross is clicked
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -49,26 +56,49 @@ public class AgentNameCapture extends JDialog {
                 onCancel();
             }
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+
+        // Dimension de la ventana y centrado
+        this.setSize(400, 200);
+        this.setLocationRelativeTo(null);
     }
 
-    private Object makeObj(final String item) {
-        return new Object() { public String toString() { return item; } };
-    }
-
+    /**
+     * Accion a ejecutar cuando se pulsa el boton Login
+     *
+     * @author David Vargas Carrillo
+     */
     private void onOK() {
-        // add your code here
+        nombreAgente = nombreAgenteField.getText();
+        mapaSeleccionado = (String) mapSelectionBox.getSelectedItem();
         dispose();
     }
 
+    /**
+     * Sale del programa al pulsar el boton Exit
+     *
+     * @author David Vargas Carrillo
+     */
     private void onCancel() {
-        // add your code here if necessary
-        dispose();
+        System.exit(0);
     }
 
-    public static void main(String[] args) {
-        AgentNameCapture dialog = new AgentNameCapture();
-        dialog.pack();
-        dialog.setVisible(true);
-        System.exit(0);
+    /**
+     * Metodo GET para obtener el mapa seleccionado
+     *
+     * @author David Vargas Carrillo
+     * @return String con el mapa seleccionado, con el formato "mapX"
+     */
+    public Object getSelectedMap() {
+        return mapaSeleccionado;
+    }
+
+    /**
+     * Metodo GET para obtener el nombre del agente
+     *
+     * @author David Vargas Carrillo
+     * @return String con el nombre del agente escrito
+     */
+    public String getNombreAgente() {
+        return nombreAgente;
     }
 }
