@@ -1,3 +1,5 @@
+package gugelcar;
+
 import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
@@ -10,6 +12,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import GUI.GugelCarView;
+
 public class GugelCar extends SingleAgent{
 
     private String password;
@@ -17,6 +21,8 @@ public class GugelCar extends SingleAgent{
     private Cerebro cerebro;
     private int numSensores;
     private String mapa;
+
+    private GugelCarView vistaPrincipal;
 
     /**
      * Constructor
@@ -62,7 +68,7 @@ public class GugelCar extends SingleAgent{
     /**
      * Método de inicialización del agente
      *
-     * @author Diego Iáñez Ávila, Jose Luis Martínez Ortiz
+     * @author Diego Iáñez Ávila, Jose Luis Martínez Ortiz, David Vargas Carrillo
      */
     @Override
     public void init(){
@@ -90,6 +96,10 @@ public class GugelCar extends SingleAgent{
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        // Ventana principal
+        vistaPrincipal = new GugelCarView(mapa);
+        vistaPrincipal.setVisible(true);
     }
 
     /**
@@ -164,7 +174,7 @@ public class GugelCar extends SingleAgent{
         processPerception();
 
         try{
-            System.out.println("Recibiendo traza");
+            // System.out.println("Recibiendo traza");
             JsonObject injson = receiveJson();
             JsonArray ja = injson.get(Mensajes.AGENT_COM_TRACE).asArray();
 
@@ -177,10 +187,15 @@ public class GugelCar extends SingleAgent{
             FileOutputStream fos = new FileOutputStream("traza_" + password + ".png");
             fos.write(data);
             fos.close();
+
+            // @todo hacer que la traza se imprima bien en la GUI
+            // vistaPrincipal.printTraceUI("./traza " + password + ".png");
+            // vistaPrincipal.repaint();
             System.out.println("Traza guardada en " + "traza_" + password + ".png");
 
         } catch (InterruptedException | IOException ex){
-            System.err.println("Error procesando traza");
+            // System.err.println("Error procesando traza");
+            vistaPrincipal.printToGeneralMsg("Error procesando traza");
         }
     }
 
@@ -239,6 +254,7 @@ public class GugelCar extends SingleAgent{
     private JsonObject receiveJson() throws InterruptedException {
         ACLMessage inbox = receiveACLMessage();
         System.out.println("Recibido mensaje " + inbox.getContent());
+        // @todo hacer que se imprima el mensaje por la GUI
 
         return Json.parse(inbox.getContent()).asObject();
     }

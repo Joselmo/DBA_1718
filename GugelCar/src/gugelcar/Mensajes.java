@@ -1,4 +1,4 @@
-
+package gugelcar;
 
 /**
  * Enum que contiene los mensajes de la aplicación

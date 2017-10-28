@@ -10,8 +10,8 @@ public class AgentNameCapture extends JDialog {
     private JFormattedTextField nombreAgenteField;
     private JComboBox<String> mapSelectionBox;
 
-    private String nombreAgente;
-    private String mapaSeleccionado;
+    private String nombreAgente;            // Nombre del agente
+    private String mapaSeleccionado;        // Mapa seleccionado (1..10)
 
     /**
      * Constructor
@@ -60,6 +60,7 @@ public class AgentNameCapture extends JDialog {
         // Dimension de la ventana y centrado
         this.setSize(400, 200);
         this.setLocationRelativeTo(null);
+        this.setTitle("Inicio");
     }
 
     /**
