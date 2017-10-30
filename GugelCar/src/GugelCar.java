@@ -21,14 +21,15 @@ public class GugelCar extends SingleAgent{
     /**
      * Constructor
      *
-     * @author Diego Iáñez Ávila
+     * @author Diego Iáñez Ávila, Andrés Molina López
      * @param aid ID del agente
      * @throws Exception si no puede crear el agente
      */
-    public GugelCar(AgentID aid) throws Exception {
+    public GugelCar(String map, AgentID aid) throws Exception {
         super(aid);
-
         controllerID = new AgentID("Girtab");
+        cerebro = new Cerebro();
+        mapa = map;
     }
 
     /**
@@ -39,7 +40,6 @@ public class GugelCar extends SingleAgent{
     @Override
     public void init(){
         // Loguearse en el mapa
-        mapa = "map6";
         JsonValue agentID = Json.value(getAid().toString());
 
         JsonObject jsonLogin = Json.object();
@@ -49,7 +49,6 @@ public class GugelCar extends SingleAgent{
         jsonLogin.add(Mensajes.AGENT_COM_SENSOR_SCANNER, agentID);
 
         numSensores = 2;
-        cerebro = new Cerebro(numSensores);
 
         sendMessage(jsonLogin.toString());
 
