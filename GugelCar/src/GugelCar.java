@@ -17,6 +17,8 @@ public class GugelCar extends SingleAgent{
     private Cerebro cerebro;
     private int numSensores;
     private String mapa;
+    private final int PERCIBIENDO = 0, ACTUANDO = 1, FINALIZADO = 2;
+    private int status;
 
     /**
      * Constructor
@@ -35,7 +37,7 @@ public class GugelCar extends SingleAgent{
     /**
      * Método de inicialización del agente
      *
-     * @author Diego Iáñez Ávila, Jose Luis Martínez Ortiz
+     * @author Diego Iáñez Ávila, Jose Luis Martínez Ortiz, Ángel Píñar Rivas
      */
     @Override
     public void init(){
@@ -62,6 +64,7 @@ public class GugelCar extends SingleAgent{
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        status = PERCIBIENDO;
     }
 
     /**
@@ -71,6 +74,45 @@ public class GugelCar extends SingleAgent{
      */
     @Override
     public void execute(){
+        int it=0;
+        boolean salir=false;
+
+        while(!salir){
+            switch (status){
+                case PERCIBIENDO:
+                    processPerception();
+                    if(cerebro.hasReachedGoal() || it>1000){
+                        status = FINALIZADO;
+                    } else {
+                        status = ACTUANDO;
+                    }
+                    break;
+                case ACTUANDO:
+                    String nextAction = cerebro.nextAction();
+                    System.out.println(nextAction);
+
+                    if (nextAction.equals(Mensajes.AGENT_COM_ACCION_REFUEL))
+                        refuel();
+                    else
+                        makeMove(nextAction);
+
+                    status = PERCIBIENDO;
+                    //Aumenta pasos cuando actúa
+                    it++;
+
+                    break;
+                case FINALIZADO:
+                    salir = true;
+                    break;
+            }
+        }
+
+        endSession();
+
+        /**
+         * A continuación versión anterior:
+         */
+        /*  * /
         // Cuando esté implementado de verdad, la condición de salida del bucle no será esta
         // y por lo tanto no se comprobará dos veces como ahora.
         int it = 0;
@@ -98,6 +140,7 @@ public class GugelCar extends SingleAgent{
 
         // Terminar sesión
         endSession();
+         */
     }
 
     /**
