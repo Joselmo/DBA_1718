@@ -70,7 +70,7 @@ public class GugelCar extends SingleAgent{
     /**
      * Cuerpo del agente
      *
-     * @author Diego Iáñez Ávila, Andrés Molina López, Jose Luis Martínez Ortiz
+     * @author Diego Iáñez Ávila, Andrés Molina López, Jose Luis Martínez Ortiz, Ángel Píñar Rivas
      */
     @Override
     public void execute(){
