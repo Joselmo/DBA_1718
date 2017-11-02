@@ -1,3 +1,5 @@
+package gugelcar;
+
 import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
@@ -5,6 +7,7 @@ import com.eclipsesource.json.JsonValue;
 import es.upv.dsic.gti_ia.core.ACLMessage;
 import es.upv.dsic.gti_ia.core.AgentID;
 import es.upv.dsic.gti_ia.core.SingleAgent;
+import gugelcar.Cerebro;
 
 import java.io.FileOutputStream;
 import java.io.IOException;

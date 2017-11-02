@@ -1,3 +1,5 @@
+package gugelcar;
+
 import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
 

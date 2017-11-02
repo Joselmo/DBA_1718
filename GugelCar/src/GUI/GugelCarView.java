@@ -39,7 +39,7 @@ public class GugelCarView extends JFrame {
         });
 
         setContentPane(contentPane);
-        setTitle("DBA Practica 3: gugelcar.GugelCar");
+        setTitle("DBA Practica 3: gugelcar.gugelcar.GugelCar");
         setLocationRelativeTo(null);
         setSize(650, 400);
         initComponents();
@@ -53,7 +53,7 @@ public class GugelCarView extends JFrame {
      */
     public GugelCarView(String mapa) {
         setContentPane(contentPane);
-        setTitle("DBA Practica 3: gugelcar.GugelCar");
+        setTitle("DBA Practica 3: gugelcar.gugelcar.GugelCar");
         setSize(650, 400);
         setMapIndicator(mapa);
         initComponents();
