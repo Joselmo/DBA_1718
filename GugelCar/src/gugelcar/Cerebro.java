@@ -230,4 +230,12 @@ public class Cerebro {
     public boolean hasReachedGoal() {
         return reachedGoal;
     }
+
+    public ArrayList<Float> getScannerCar() {
+        return scannerCar;
+    }
+
+    public ArrayList<Integer> getRadarCar() {
+        return radarCar;
+    }
 }

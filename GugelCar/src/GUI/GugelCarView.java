@@ -1,7 +1,13 @@
 package GUI;
 
+import es.upv.dsic.gti_ia.core.AgentID;
+import es.upv.dsic.gti_ia.core.AgentsConnection;
+import gugelcar.GugelCar;
+import gugelcar.Mensajes;
+
 import javax.swing.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 
 public class GugelCarView extends JFrame {
     private JButton buttonEjecutar;
@@ -19,13 +25,18 @@ public class GugelCarView extends JFrame {
     private JTextArea radarTextArea;
     private JLabel traceLabel;
 
+    private GugelCar gugelcar;
+
+    private String mapaSeleccionado,nombreAgente;
 
     /**
      * Constructor
      *
-     * @author David Vargas Carrillo
+     * @author David Vargas Carrillo, Jose Luis Martínez Ortiz
+     * @param mapaSeleccionado para donde se va a ejecutar el agente.
+     * @param nombreAgente nombre que identifica al agente
      */
-    public GugelCarView() {
+    public GugelCarView(String mapaSeleccionado, String nombreAgente) {
         buttonEjecutar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onEjecutar();
@@ -39,10 +50,20 @@ public class GugelCarView extends JFrame {
         });
 
         setContentPane(contentPane);
-        setTitle("DBA Practica 3: gugelcar.gugelcar.GugelCar");
+        setTitle("DBA Practica 2: gugelcar.gugelcar.GugelCar");
         setLocationRelativeTo(null);
         setSize(650, 400);
         initComponents();
+
+        // Conectarse a la plataforma
+        AgentsConnection.connect("isg2.ugr.es", 6000,
+                Mensajes.AGENT_HOST, Mensajes.AGENT_USER, Mensajes.AGENT_PASS, false);
+
+        this.mapaSeleccionado = mapaSeleccionado;
+        this.nombreAgente = nombreAgente;
+
+        mapIndicator.setText(mapaSeleccionado);
+
     }
 
     /**
@@ -53,7 +74,7 @@ public class GugelCarView extends JFrame {
      */
     public GugelCarView(String mapa) {
         setContentPane(contentPane);
-        setTitle("DBA Practica 3: gugelcar.gugelcar.GugelCar");
+        setTitle("DBA Practica 2: gugelcar.gugelcar.GugelCar");
         setSize(650, 400);
         setMapIndicator(mapa);
         initComponents();
@@ -68,7 +89,10 @@ public class GugelCarView extends JFrame {
         scannerTextArea.setEditable(false);
         radarTextArea.setEditable(false);
         generalMsgTextArea.setEditable(false);
-        buttonEjecutar.setEnabled(false);
+        buttonEjecutar.setEnabled(true);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        pack();
+
     }
 
     /**
@@ -84,23 +108,29 @@ public class GugelCarView extends JFrame {
     /**
      * Imprimir texto en el panel Radar
      *
-     * @author David Vargas Carrillo
+     * @author David Vargas Carrillo, Jose Luis Martínez Ortiz
      * @param radarText informacion recogida por el sensor radar
      */
-    public void printToRadar(String radarText) {
+    public void printToRadar(ArrayList<Integer> radarText) {
         radarTextArea.setText(" ");
-        radarTextArea.setText(radarText);
+        String texto = "";
+        for(Integer i:radarText)
+            texto += i+"   ";
+        radarTextArea.append(texto);
     }
 
     /**
      * Imprimir texto en el panel Scanner
      *
-     * @author David Vargas Carrillo
+     * @author David Vargas Carrillo, Jose Luis Martínez Ortiz
      * @param scannerText informacion recogida por el sensor scanner
      */
-    public void printToScanner(String scannerText) {
+    public void printToScanner(ArrayList<Float> scannerText) {
         scannerTextArea.setText(" ");
-        scannerTextArea.setText(scannerText);
+        String texto = "";
+        for(Float i:scannerText)
+            texto += i.toString().substring(0,i.toString().indexOf('.')+2)+"   ";
+        scannerTextArea.append(texto);
     }
 
     /**
@@ -111,7 +141,7 @@ public class GugelCarView extends JFrame {
      */
     public void printToGeneralMsg(String message) {
         generalMsgTextArea.setText(" ");
-        generalMsgTextArea.setText(message);
+        generalMsgTextArea.append(message);
     }
 
     /**
@@ -128,10 +158,31 @@ public class GugelCarView extends JFrame {
     /**
      * Accion del boton de Ejecutar
      *
-     * @author David Vargas Carrillo
+     * @author David Vargas Carrillo, Jose Luis Martínez Ortiz
      */
     private void onEjecutar(){
         // Completar
+        // @todo implementar mecanismos para parar la ejecucion en caso de que se reciban erores tipo BAD_MAP
+        try {
+            gugelcar = new GugelCar(mapaSeleccionado, new AgentID(nombreAgente),this);
+
+            System.out.println("\n\n-------------------------------\n");
+
+            gugelcar.start();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        buttonEjecutar.setEnabled(false);
+    }
+
+    /**
+     * @author Jose Luis Martínez Ortiz
+     * Permite que se vuelva a ejecutar el mapa.
+     */
+    public void enableEjecutar(){
+        buttonEjecutar.setEnabled(true);
     }
 
     /**

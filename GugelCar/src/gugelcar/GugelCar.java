@@ -1,5 +1,6 @@
 package gugelcar;
 
+import GUI.GugelCarView;
 import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
@@ -23,6 +24,8 @@ public class GugelCar extends SingleAgent{
     private final int PERCIBIENDO = 0, ACTUANDO = 1, FINALIZADO = 2;
     private int status;
 
+    private GugelCarView view;
+
     /**
      * Constructor
      *
@@ -35,6 +38,21 @@ public class GugelCar extends SingleAgent{
         controllerID = new AgentID("Girtab");
         cerebro = new Cerebro();
         mapa = map;
+    }
+
+    /**
+     * Constructor
+     *
+     * @author Jose Luis Martínez Ortiz
+     * @param aid ID del agente
+     * @throws Exception si no puede crear el agente
+     */
+    public GugelCar(String map, AgentID aid,GugelCarView v) throws Exception {
+        super(aid);
+        controllerID = new AgentID("Girtab");
+        cerebro = new Cerebro();
+        mapa = map;
+        view = v;
     }
 
     /**
@@ -177,12 +195,14 @@ public class GugelCar extends SingleAgent{
     private void endSession(){
         // Desloguearse
         System.out.println("Terminando sesión");
+        view.printToGeneralMsg("Terminando sesión");
 
         sendCommand(Mensajes.AGENT_COM_LOGOUT);
         processPerception();
 
         try{
             System.out.println("Recibiendo traza");
+            view.printToGeneralMsg("Recibiendo traza");
             JsonObject injson = receiveJson();
             JsonArray ja = injson.get(Mensajes.AGENT_COM_TRACE).asArray();
 
@@ -196,10 +216,14 @@ public class GugelCar extends SingleAgent{
             fos.write(data);
             fos.close();
             System.out.println("Traza guardada en " + "traza_" + password + ".png");
+            view.printToGeneralMsg("Traza guardada en \" + \"traza_\" + password + \".png");
 
         } catch (InterruptedException | IOException ex){
             System.err.println("Error procesando traza");
+            view.printToGeneralMsg("Error procesando traza");
         }
+
+        view.enableEjecutar();
     }
 
     /**
@@ -257,6 +281,7 @@ public class GugelCar extends SingleAgent{
     private JsonObject receiveJson() throws InterruptedException {
         ACLMessage inbox = receiveACLMessage();
         System.out.println("Recibido mensaje " + inbox.getContent());
+        view.printToGeneralMsg("Recibido mensaje "+ inbox.getContent());
 
         return Json.parse(inbox.getContent()).asObject();
     }
@@ -281,5 +306,8 @@ public class GugelCar extends SingleAgent{
         } catch (Exception e){
             e.printStackTrace();
         }
+
+        view.printToScanner(cerebro.getScannerCar());
+        view.printToRadar(cerebro.getRadarCar());
     }
 }

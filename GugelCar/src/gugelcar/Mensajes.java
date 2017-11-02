@@ -13,38 +13,38 @@ public enum Mensajes {
     INSTANCE;
 
     // Configuración del servidor
-    static final String AGENT_HOST = "Girtab";
-    static final String AGENT_USER = "Eridano";
-    static final String AGENT_PASS = "Esquivel";
+    public static final String AGENT_USER = "Eridano";
+    public static final String AGENT_HOST = "Girtab";
+    public static final String AGENT_PASS = "Esquivel";
 
 
     // MENSAJES DEL AGENTE
-    static final String AGENT_COM_OK = "OK";
-    static final String AGENT_COM_BADMESSAGE = "BAD_MESSAGE";
+    public static final String AGENT_COM_OK = "OK";
+    public static final String AGENT_COM_BADMESSAGE = "BAD_MESSAGE";
 
-    static final String AGENT_COM_LOGOUT = "logout";
-    static final String AGENT_COM_LOGIN = "login";
+    public static final String AGENT_COM_LOGOUT = "logout";
+    public static final String AGENT_COM_LOGIN = "login";
 
-    static final String AGENT_COM_RESULT = "result";
+    public static final String AGENT_COM_RESULT = "result";
 
-    static final String AGENT_COM_COMMAND = "command";
-    static final String AGENT_COM_KEY = "key";
-    static final String AGENT_COM_WORLD = "world";
-    static final String AGENT_COM_SENSOR_SCANNER = "scanner";
-    static final String AGENT_COM_SENSOR_RADAR = "radar";
+    public static final String AGENT_COM_COMMAND = "command";
+    public static final String AGENT_COM_KEY = "key";
+    public static final String AGENT_COM_WORLD = "world";
+    public static final String AGENT_COM_SENSOR_SCANNER = "scanner";
+    public static final String AGENT_COM_SENSOR_RADAR = "radar";
 
-    static final String AGENT_COM_TRACE = "trace";
+    public static final String AGENT_COM_TRACE = "trace";
 
     // ACCIONES DEL COCHE
-    static final String AGENT_COM_ACCION_REFUEL = "refuel";
-    static final String AGENT_COM_ACCION_MV_NW = "moveNW";
-    static final String AGENT_COM_ACCION_MV_N = "moveN";
-    static final String AGENT_COM_ACCION_MV_NE = "moveNE";
-    static final String AGENT_COM_ACCION_MV_W = "moveW";
-    static final String AGENT_COM_ACCION_MV_E = "moveE";
-    static final String AGENT_COM_ACCION_MV_SW = "moveSW";
-    static final String AGENT_COM_ACCION_MV_S = "moveS";
-    static final String AGENT_COM_ACCION_MV_SE = "moveSE";
+    public static final String AGENT_COM_ACCION_REFUEL = "refuel";
+    public static final String AGENT_COM_ACCION_MV_NW = "moveNW";
+    public static final String AGENT_COM_ACCION_MV_N = "moveN";
+    public static final String AGENT_COM_ACCION_MV_NE = "moveNE";
+    public static final String AGENT_COM_ACCION_MV_W = "moveW";
+    public static final String AGENT_COM_ACCION_MV_E = "moveE";
+    public static final String AGENT_COM_ACCION_MV_SW = "moveSW";
+    public static final String AGENT_COM_ACCION_MV_S = "moveS";
+    public static final String AGENT_COM_ACCION_MV_SE = "moveSE";
 
 
 
