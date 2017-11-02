@@ -6,6 +6,7 @@ import gugelcar.GugelCar;
 import gugelcar.Mensajes;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 
@@ -16,7 +17,6 @@ public class GugelCarView extends JFrame {
     private JPanel contentPane;
     private JPanel buttonsPanel;
     private JPanel informationPanel;
-    private JPanel imgPanel;
     private JPanel GeneralMsgPanel;
     private JPanel ScannerPanel;
     private JPanel RadarPanel;
@@ -24,6 +24,7 @@ public class GugelCarView extends JFrame {
     private JTextArea generalMsgTextArea;
     private JTextArea radarTextArea;
     private JLabel traceLabel;
+    private JPanel canvasPanel;
 
     private GugelCar gugelcar;
 
@@ -64,6 +65,8 @@ public class GugelCarView extends JFrame {
 
         mapIndicator.setText(mapaSeleccionado);
 
+
+
     }
 
     /**
@@ -90,10 +93,15 @@ public class GugelCarView extends JFrame {
         radarTextArea.setEditable(false);
         generalMsgTextArea.setEditable(false);
         buttonEjecutar.setEnabled(true);
+        canvasPanel.removeAll();
+        canvasPanel.add(new Canvas());
+
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack();
 
     }
+
+
 
     /**
      * Metodo SET para el indicador del mapa
