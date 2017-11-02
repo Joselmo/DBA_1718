@@ -81,7 +81,7 @@ public class GugelCar extends SingleAgent{
             switch (status){
                 case PERCIBIENDO:
                     processPerception();
-                    if(cerebro.hasReachedGoal() || it>1000){
+                    if(cerebro.hasReachedGoal() || it>1500){
                         status = FINALIZADO;
                     } else {
                         status = ACTUANDO;
