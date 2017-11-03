@@ -17,12 +17,16 @@ public class Cerebro {
     private int bateriaCar;                 // Porcentaje de carga de la bateria
 
     // Memoria del mundo que ha pisado el agente y donde se encuentra actualmente
-    private int [][] mapaMundo;
+    private int [][] mapaPulgarcito;
     private int pos_fila_mapa;
     private int pos_col_mapa;
 
     // Memoria interna con las direcciones
     private final ArrayList<String> direcciones;
+
+    // Atributos propios de Fantasmita
+    private int fantasmita_x;       // Variable X de origen del algoritmo
+    private int fantasmita_y;       // Variable Y de origen del algoritmo
 
     // METODOS
     /**
@@ -39,7 +43,7 @@ public class Cerebro {
         bateriaCar = 0;     // Se inicializa a 0 puesto que desconocemos su estado real
 
         // Inicializacion del mapa mundo y situacion del agente en el centro de su memoria del mundo
-        mapaMundo = new int[10001][10001];
+        mapaPulgarcito = new int[10001][10001];
         pos_fila_mapa = 5000;
         pos_col_mapa = 5000;
 
@@ -125,7 +129,7 @@ public class Cerebro {
                 entorno.add(Float.POSITIVE_INFINITY);
             }
             else {
-                entorno.add(scannerCar.get(i) + mapaMundo[pos_fila_mapa + fil][pos_col_mapa + col] * 200);
+                entorno.add(scannerCar.get(i) + mapaPulgarcito[pos_fila_mapa + fil][pos_col_mapa + col] * 200);
             }
 
             // Para controlar la correlacion del vector entorno con la matriz del mapa del mundo interno del agente
@@ -182,7 +186,7 @@ public class Cerebro {
     public void refreshMemory(boolean confirmacion, String movimiento){
         if (confirmacion) {
             // Se marca en la memoria que hemos pasado por la casilla
-            mapaMundo[pos_fila_mapa][pos_col_mapa]++;
+            mapaPulgarcito[pos_fila_mapa][pos_col_mapa]++;
 
             // Se desplaza la posicion en la matriz memoria segun el movimiento decidido
             switch (movimiento) {
@@ -225,6 +229,15 @@ public class Cerebro {
         else {
             System.err.println("Movimiento no permitido");
         }
+    }
+
+    /**
+     * Algoritmo que escanea los bordes del muro proximo al objetivo con el fin de comprobar si hay GAMEOVER
+     * @author David Vargas Carrillo, Angel Piñar Rivas
+     * @return
+     */
+    private boolean Fantasmita() {
+
     }
 
     public boolean hasReachedGoal() {
