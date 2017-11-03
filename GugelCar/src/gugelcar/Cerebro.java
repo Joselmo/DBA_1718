@@ -17,7 +17,7 @@ public class Cerebro {
     private int bateriaCar;                 // Porcentaje de carga de la bateria
 
     // Memoria del mundo que ha pisado el agente y donde se encuentra actualmente
-    private int [][] mapaMundo;
+    private float [][] mapaMundo;
     private int pos_fila_mapa;
     private int pos_col_mapa;
 
@@ -39,7 +39,7 @@ public class Cerebro {
         bateriaCar = 0;     // Se inicializa a 0 puesto que desconocemos su estado real
 
         // Inicializacion del mapa mundo y situacion del agente en el centro de su memoria del mundo
-        mapaMundo = new int[10001][10001];
+        mapaMundo = new float[10001][10001];
         pos_fila_mapa = 5000;
         pos_col_mapa = 5000;
 
@@ -175,45 +175,88 @@ public class Cerebro {
     /**
      * Envia el siguiente movimiento, actualiza el mapa interno del agente y reduce la bateria
      *
-     * @author Ángel Píñar Rivas, David Vargas Carrillo, Andrés Molina López
+     * @author Ángel Píñar Rivas, David Vargas Carrillo, Andrés Molina López, Diego Iáñez Ávila
      * @param confirmacion indica si el resultado del movimiento fue válido
      * @param movimiento indica hacia donde se ha realizado el movimiento
      */
     public void refreshMemory(boolean confirmacion, String movimiento){
         if (confirmacion) {
+            float pesoEspalda = 0.25f;
+
             // Se marca en la memoria que hemos pasado por la casilla
             mapaMundo[pos_fila_mapa][pos_col_mapa]++;
 
             // Se desplaza la posicion en la matriz memoria segun el movimiento decidido
+            // y marcar en pulgarcito también las posiciones que quedan a la espalda del coche
             switch (movimiento) {
                 case Mensajes.AGENT_COM_ACCION_MV_NW:  // Movimiento noroeste
+                    for (int i = -1; i < 2; ++i){
+                        mapaMundo[pos_fila_mapa + i][pos_col_mapa] += pesoEspalda;
+                    }
+
                     pos_fila_mapa--;
                     pos_col_mapa--;
                     break;
+
                 case Mensajes.AGENT_COM_ACCION_MV_N:  // Movimiento norte
+                    for (int i = -1; i < 2; ++i){
+                        mapaMundo[pos_fila_mapa][pos_col_mapa + i] += pesoEspalda;
+                    }
+
                     pos_fila_mapa--;
                     break;
+
                 case Mensajes.AGENT_COM_ACCION_MV_NE:  // Movimiento noreste
+                    for (int i = -1; i < 2; ++i){
+                        mapaMundo[pos_fila_mapa + i][pos_col_mapa] += pesoEspalda;
+                    }
+
                     pos_col_mapa++;
                     pos_fila_mapa--;
                     break;
+
                 case Mensajes.AGENT_COM_ACCION_MV_W:  // Movimiento oeste
+                    for (int i = -1; i < 2; ++i){
+                        mapaMundo[pos_fila_mapa + i][pos_col_mapa] += pesoEspalda;
+                    }
+
                     pos_col_mapa--;
                     break;
+
                 case Mensajes.AGENT_COM_ACCION_MV_E:  // Movimiento este
+                    for (int i = -1; i < 2; ++i){
+                        mapaMundo[pos_fila_mapa + i][pos_col_mapa] += pesoEspalda;
+                    }
+
                     pos_col_mapa++;
                     break;
+
                 case Mensajes.AGENT_COM_ACCION_MV_SW:  // Movimiento suroeste
+                    for (int i = -1; i < 2; ++i){
+                        mapaMundo[pos_fila_mapa + i][pos_col_mapa] += pesoEspalda;
+                    }
+
                     pos_fila_mapa++;
                     pos_col_mapa--;
                     break;
+
                 case Mensajes.AGENT_COM_ACCION_MV_S:  // Movimiento sur
+                    for (int i = -1; i < 2; ++i){
+                        mapaMundo[pos_fila_mapa][pos_col_mapa + i] += pesoEspalda;
+                    }
+
                     pos_fila_mapa++;
                     break;
+
                 case Mensajes.AGENT_COM_ACCION_MV_SE:  // Movimiento sureste
+                    for (int i = -1; i < 2; ++i){
+                        mapaMundo[pos_fila_mapa + i][pos_col_mapa] += pesoEspalda;
+                    }
+
                     pos_fila_mapa++;
                     pos_col_mapa++;
                     break;
+
                 default:        // Ningun movimiento
                     // En el caso de que no se mueva, no pierde ningun punto de bateria
                     bateriaCar++;

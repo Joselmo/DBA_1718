@@ -130,6 +130,8 @@ public class GugelCar extends SingleAgent{
 
         endSession();
 
+        System.out.println("Número de pasos: " + it);
+
         /**
          * A continuación versión anterior:
          */
