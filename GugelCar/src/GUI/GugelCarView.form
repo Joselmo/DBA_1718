@@ -88,7 +88,9 @@
                     <preferred-size width="150" height="50"/>
                   </grid>
                 </constraints>
-                <properties/>
+                <properties>
+                  <columns value="50"/>
+                </properties>
               </component>
             </children>
           </grid>
@@ -102,11 +104,13 @@
             <children>
               <component id="92f78" class="javax.swing.JTextArea" binding="radarTextArea">
                 <constraints>
-                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
                     <preferred-size width="150" height="50"/>
                   </grid>
                 </constraints>
-                <properties/>
+                <properties>
+                  <columns value="50"/>
+                </properties>
               </component>
               <component id="8c59d" class="javax.swing.JLabel">
                 <constraints>
@@ -136,6 +140,7 @@
                   </grid>
                 </constraints>
                 <properties>
+                  <columns value="50"/>
                   <editable value="false"/>
                   <lineWrap value="true"/>
                 </properties>

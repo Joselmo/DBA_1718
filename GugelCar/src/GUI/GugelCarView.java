@@ -93,8 +93,8 @@ public class GugelCarView extends JFrame {
         radarTextArea.setEditable(false);
         generalMsgTextArea.setEditable(false);
         buttonEjecutar.setEnabled(true);
-        canvasPanel.removeAll();
-        canvasPanel.add(new Canvas());
+       // canvasPanel.removeAll();
+       // canvasPanel.add(new Canvas());
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack();
@@ -120,11 +120,10 @@ public class GugelCarView extends JFrame {
      * @param radarText informacion recogida por el sensor radar
      */
     public void printToRadar(ArrayList<Integer> radarText) {
-        radarTextArea.setText(" ");
         String texto = "";
         for(Integer i:radarText)
             texto += i+"   ";
-        radarTextArea.append(texto);
+        radarTextArea.append("\n"+texto);
     }
 
     /**
@@ -134,11 +133,10 @@ public class GugelCarView extends JFrame {
      * @param scannerText informacion recogida por el sensor scanner
      */
     public void printToScanner(ArrayList<Float> scannerText) {
-        scannerTextArea.setText(" ");
         String texto = "";
         for(Float i:scannerText)
             texto += i.toString().substring(0,i.toString().indexOf('.')+2)+"   ";
-        scannerTextArea.append(texto);
+        scannerTextArea.append("\n"+texto);
     }
 
     /**
@@ -148,8 +146,7 @@ public class GugelCarView extends JFrame {
      * @param message mensaje que se quiere imprimir
      */
     public void printToGeneralMsg(String message) {
-        generalMsgTextArea.setText(" ");
-        generalMsgTextArea.append(message);
+        generalMsgTextArea.append("\n"+message);
     }
 
     /**
