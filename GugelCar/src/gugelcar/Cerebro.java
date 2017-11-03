@@ -4,6 +4,7 @@ import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Cerebro {
     //DATOS MIEMBROS
@@ -25,6 +26,8 @@ public class Cerebro {
     private final ArrayList<String> direcciones;
 
     // Atributos propios de Fantasmita
+    private ArrayList<Float>  scannerFantasmita;
+    private int [][] mapaMundo;
     private int fantasmita_x;       // Variable X de origen del algoritmo
     private int fantasmita_y;       // Variable Y de origen del algoritmo
 
@@ -42,10 +45,13 @@ public class Cerebro {
         scannerCar = new ArrayList<>(9);
         bateriaCar = 0;     // Se inicializa a 0 puesto que desconocemos su estado real
 
-        // Inicializacion del mapa mundo y situacion del agente en el centro de su memoria del mundo
+        // Inicializacion del mapa pulgarcito y situacion del agente en el centro de su memoria del mundo
         mapaPulgarcito = new int[10001][10001];
         pos_fila_mapa = 5000;
         pos_col_mapa = 5000;
+
+        // Inicializacion del mapa mundo
+        mapaMundo = new int[1001][1001];
 
         // Inicializacion de las direcciones
         direcciones = new ArrayList<>(9);
@@ -66,6 +72,7 @@ public class Cerebro {
      *
      * @author Andrés Molina López, Diego Iáñez Ávila, Jose Luis Martínez Ortiz
      */
+    // @todo agregar la percepcion a scannerPulgarcito
     public void processPerception(ArrayList<JsonObject> sensores){
         for (JsonObject msg : sensores){
             // Comprobamos si se está usando el radar y en caso afirmativo rellenamos su matriz de percepción
@@ -188,6 +195,10 @@ public class Cerebro {
             // Se marca en la memoria que hemos pasado por la casilla
             mapaPulgarcito[pos_fila_mapa][pos_col_mapa]++;
 
+            // @todo escribir datos del scannerFantasmita en mapaMundo
+            // Se escribe los datos del scanner en mapaMundo
+
+
             // Se desplaza la posicion en la matriz memoria segun el movimiento decidido
             switch (movimiento) {
                 case Mensajes.AGENT_COM_ACCION_MV_NW:  // Movimiento noroeste
@@ -231,14 +242,14 @@ public class Cerebro {
         }
     }
 
-    /**
-     * Algoritmo que escanea los bordes del muro proximo al objetivo con el fin de comprobar si hay GAMEOVER
-     * @author David Vargas Carrillo, Angel Piñar Rivas
-     * @return
-     */
-    private boolean Fantasmita() {
-
-    }
+//    /**
+//     * Algoritmo que escanea los bordes del muro proximo al objetivo con el fin de comprobar si hay GAMEOVER
+//     * @author David Vargas Carrillo, Angel Piñar Rivas
+//     * @return
+//     */
+//    private boolean Fantasmita() {
+//
+//    }
 
     public boolean hasReachedGoal() {
         return reachedGoal;
