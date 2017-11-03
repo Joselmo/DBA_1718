@@ -47,7 +47,7 @@ public class GugelCar extends SingleAgent{
      * @param aid ID del agente
      * @throws Exception si no puede crear el agente
      */
-    public GugelCar(String map, AgentID aid,GugelCarView v) throws Exception {
+    public GugelCar(String map, AgentID aid, GugelCarView v) throws Exception {
         super(aid);
         controllerID = new AgentID("Girtab");
         cerebro = new Cerebro();
