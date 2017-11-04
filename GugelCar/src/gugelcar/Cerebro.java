@@ -25,7 +25,7 @@ class Cerebro {
     private final ArrayList<String> direcciones;
 
     // Atributos propios de Fantasmita
-    private ArrayList<Float>  scannerFantasmita;
+    private ArrayList<Integer>  radarFantasmita;
     private int [][] mapaMundo;
     private int fantasmita_x;       // Variable X de origen del algoritmo
     private int fantasmita_y;       // Variable Y de origen del algoritmo
@@ -50,7 +50,7 @@ class Cerebro {
         pos_col_mapa = 5000;
 
         // Inicializacion del mapa mundo
-        scannerFantasmita = new ArrayList<>(25);
+        radarFantasmita = new ArrayList<>(25);
         mapaMundo = new int[10001][10001];
         fantasmita_x = 5000;
         fantasmita_y = 5000;
@@ -74,7 +74,6 @@ class Cerebro {
      *
      * @author Andrés Molina López, Diego Iáñez Ávila, Jose Luis Martínez Ortiz
      */
-    // @todo agregar la percepcion a scannerPulgarcito
     void processPerception(ArrayList<JsonObject> sensores){
         for (JsonObject msg : sensores){
             // Comprobamos si se está usando el radar y en caso afirmativo rellenamos su matriz de percepción
@@ -86,6 +85,11 @@ class Cerebro {
                     radarCar.add(radar.get(++i).asInt());
                     radarCar.add(radar.get(++i).asInt());
                 }
+
+                // Relleno del radar para la funcion fantasmita en el cual se usa el radar percibido al completo
+                for (int i=0; i<25; i++){
+                    radarFantasmita.add(radar.get(i).asInt());
+                }
             }
 
             // Comprobamos si se está usando el scanner y en caso afirmativo rellenamos su matriz de percepción
@@ -96,11 +100,6 @@ class Cerebro {
                     scannerCar.add(scanner.get(i).asFloat());
                     scannerCar.add(scanner.get(++i).asFloat());
                     scannerCar.add(scanner.get(++i).asFloat());
-                }
-
-                // Relleno del scanner para la funcion fantasmita en el cual se usa el scanner percibido al completo
-                for (int i=0; i<25; i++){
-                    scannerFantasmita.add(scanner.get(i).asFloat());
                 }
             }
         }

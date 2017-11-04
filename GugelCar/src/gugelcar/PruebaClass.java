@@ -2,8 +2,6 @@ package gugelcar;
 
 import GUI.AgentNameCapture;
 import GUI.GugelCarView;
-import es.upv.dsic.gti_ia.core.AgentID;
-import es.upv.dsic.gti_ia.core.AgentsConnection;
 
 public class PruebaClass {
 
