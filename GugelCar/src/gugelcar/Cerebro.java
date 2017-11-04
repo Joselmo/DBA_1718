@@ -24,7 +24,7 @@ class Cerebro {
     // Memoria interna con las direcciones
     private final ArrayList<String> direcciones;
 
-    // Atributos propios de Fantasmita
+    // Atributos propios de Fantasmita(TM)
     private ArrayList<Integer>  radarFantasmita;
     private int [][] mapaMundo;
     private int fantasmita_x;       // Variable X de origen del algoritmo

@@ -174,6 +174,16 @@ public class GugelCarView extends JFrame {
     }
 
     /**
+     * Dibujar la percepción actual en el mapa de la GUI
+     *
+     * @author Diego Iáñez Ávila
+     * @param radar Percepción del radar
+     */
+    public void updateMap(ArrayList<Integer> radar){
+
+    }
+
+    /**
      * Accion del boton de Ejecutar
      *
      * @author David Vargas Carrillo, Jose Luis Martínez Ortiz
