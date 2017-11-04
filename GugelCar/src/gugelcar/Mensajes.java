@@ -46,13 +46,9 @@ public enum Mensajes {
     public static final String AGENT_COM_ACCION_MV_S = "moveS";
     public static final String AGENT_COM_ACCION_MV_SE = "moveSE";
 
-
-
-    // MENSAJES DE GUGEL CAR
-
-
-
-
-
+    // ESTADOS DE GUGEL CAR
+    public static final int AGENT_STATUS_PERCIBIENDO = 0;
+    public static final int AGENT_STATUS_ACTUANDO = 1;
+    public static final int AGENT_STATUS_FINALIZADO = 2;
 
 }

@@ -8,7 +8,6 @@ import com.eclipsesource.json.JsonValue;
 import es.upv.dsic.gti_ia.core.ACLMessage;
 import es.upv.dsic.gti_ia.core.AgentID;
 import es.upv.dsic.gti_ia.core.SingleAgent;
-import gugelcar.Cerebro;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -21,7 +20,6 @@ public class GugelCar extends SingleAgent{
     private Cerebro cerebro;
     private int numSensores;
     private String mapa;
-    private final int PERCIBIENDO = 0, ACTUANDO = 1, FINALIZADO = 2;
     private int status;
 
     private GugelCarView view;
@@ -71,7 +69,7 @@ public class GugelCar extends SingleAgent{
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        status = PERCIBIENDO;
+        status = Mensajes.AGENT_STATUS_PERCIBIENDO;
     }
 
     /**
@@ -86,15 +84,15 @@ public class GugelCar extends SingleAgent{
 
         while(!salir){
             switch (status){
-                case PERCIBIENDO:
+                case Mensajes.AGENT_STATUS_PERCIBIENDO:
                     processPerception();
                     if(cerebro.hasReachedGoal() || it>1500){
-                        status = FINALIZADO;
+                        status = Mensajes.AGENT_STATUS_FINALIZADO;
                     } else {
-                        status = ACTUANDO;
+                        status = Mensajes.AGENT_STATUS_ACTUANDO;
                     }
                     break;
-                case ACTUANDO:
+                case Mensajes.AGENT_STATUS_ACTUANDO:
                     String nextAction = cerebro.nextAction();
                     System.out.println(nextAction);
 
@@ -103,12 +101,12 @@ public class GugelCar extends SingleAgent{
                     else
                         makeMove(nextAction);
 
-                    status = PERCIBIENDO;
+                    status = Mensajes.AGENT_STATUS_PERCIBIENDO;
                     //Aumenta pasos cuando actúa
                     it++;
 
                     break;
-                case FINALIZADO:
+                case Mensajes.AGENT_STATUS_FINALIZADO:
                     salir = true;
                     break;
             }
