@@ -4,7 +4,7 @@ package gugelcar;
  * Enum que contiene los mensajes de la aplicación
  * incluyendo los mensajes del agente.
  *
- * @author Jose Luis Martínez Ortiz
+ * @author Jose Luis Martínez Ortiz, Andrés Molina López
  *
  *
  */
