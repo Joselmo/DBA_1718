@@ -51,7 +51,7 @@ public class GugelCarView extends JFrame {
         });
 
         setContentPane(contentPane);
-        setTitle("DBA Practica 2: gugelcar.gugelcar.GugelCar");
+        setTitle("DBA Practica 2: GugelCar");
         setLocationRelativeTo(null);
         setSize(650, 400);
         initComponents();
@@ -64,9 +64,6 @@ public class GugelCarView extends JFrame {
         this.nombreAgente = nombreAgente;
 
         mapIndicator.setText(mapaSeleccionado);
-
-
-
     }
 
     /**
@@ -122,7 +119,7 @@ public class GugelCarView extends JFrame {
     public void printToRadar(ArrayList<Integer> radarText) {
         String texto = "";
         for(Integer i:radarText)
-            texto += i+"   ";
+            texto += i + "   ";
         radarTextArea.append("\n"+texto);
     }
 
@@ -135,7 +132,7 @@ public class GugelCarView extends JFrame {
     public void printToScanner(ArrayList<Float> scannerText) {
         String texto = "";
         for(Float i:scannerText)
-            texto += i.toString().substring(0,i.toString().indexOf('.')+2)+"   ";
+            texto += i.toString().substring(0,i.toString().indexOf('.') + 2) + "   ";
         scannerTextArea.append("\n"+texto);
     }
 

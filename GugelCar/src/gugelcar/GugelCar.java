@@ -8,7 +8,6 @@ import com.eclipsesource.json.JsonValue;
 import es.upv.dsic.gti_ia.core.ACLMessage;
 import es.upv.dsic.gti_ia.core.AgentID;
 import es.upv.dsic.gti_ia.core.SingleAgent;
-import gugelcar.Cerebro;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -21,7 +20,6 @@ public class GugelCar extends SingleAgent{
     private Cerebro cerebro;
     private int numSensores;
     private String mapa;
-    private final int PERCIBIENDO = 0, ACTUANDO = 1, FINALIZADO = 2;
     private int status;
 
     private GugelCarView view;
@@ -29,25 +27,11 @@ public class GugelCar extends SingleAgent{
     /**
      * Constructor
      *
-     * @author Diego Iáñez Ávila, Andrés Molina López
+     * @author Diego Iáñez Ávila, Andrés Molina López, Jose Luis Martínez Ortiz
      * @param aid ID del agente
      * @throws Exception si no puede crear el agente
      */
-    public GugelCar(String map, AgentID aid) throws Exception {
-        super(aid);
-        controllerID = new AgentID("Girtab");
-        cerebro = new Cerebro();
-        mapa = map;
-    }
-
-    /**
-     * Constructor
-     *
-     * @author Jose Luis Martínez Ortiz
-     * @param aid ID del agente
-     * @throws Exception si no puede crear el agente
-     */
-    public GugelCar(String map, AgentID aid,GugelCarView v) throws Exception {
+    public GugelCar(String map, AgentID aid, GugelCarView v) throws Exception {
         super(aid);
         controllerID = new AgentID("Girtab");
         cerebro = new Cerebro();
@@ -85,7 +69,7 @@ public class GugelCar extends SingleAgent{
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        status = PERCIBIENDO;
+        status = Mensajes.AGENT_STATUS_PERCIBIENDO;
     }
 
     /**
@@ -100,15 +84,15 @@ public class GugelCar extends SingleAgent{
 
         while(!salir){
             switch (status){
-                case PERCIBIENDO:
+                case Mensajes.AGENT_STATUS_PERCIBIENDO:
                     processPerception();
                     if(cerebro.hasReachedGoal() || it>1500){
-                        status = FINALIZADO;
+                        status = Mensajes.AGENT_STATUS_FINALIZADO;
                     } else {
-                        status = ACTUANDO;
+                        status = Mensajes.AGENT_STATUS_ACTUANDO;
                     }
                     break;
-                case ACTUANDO:
+                case Mensajes.AGENT_STATUS_ACTUANDO:
                     String nextAction = cerebro.nextAction();
                     System.out.println(nextAction);
 
@@ -117,51 +101,18 @@ public class GugelCar extends SingleAgent{
                     else
                         makeMove(nextAction);
 
-                    status = PERCIBIENDO;
+                    status = Mensajes.AGENT_STATUS_PERCIBIENDO;
                     //Aumenta pasos cuando actúa
                     it++;
 
                     break;
-                case FINALIZADO:
+                case Mensajes.AGENT_STATUS_FINALIZADO:
                     salir = true;
                     break;
             }
         }
 
         endSession();
-
-        /**
-         * A continuación versión anterior:
-         */
-        /*  * /
-        // Cuando esté implementado de verdad, la condición de salida del bucle no será esta
-        // y por lo tanto no se comprobará dos veces como ahora.
-        int it = 0;
-        boolean salir = false;
-
-        while (!salir) {
-            processPerception();
-
-            if(!cerebro.hasReachedGoal() && it < 1000) {
-
-                String nextAction = cerebro.nextAction();
-                System.out.println(nextAction);
-
-                if (nextAction.equals(Mensajes.AGENT_COM_ACCION_REFUEL))
-                    refuel();
-                else
-                    makeMove(nextAction);
-            }
-            else{
-                salir = true;
-            }
-
-            ++it;
-        }
-
-        // Terminar sesión
-        endSession();
-         */
     }
 
     /**
