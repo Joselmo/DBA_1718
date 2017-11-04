@@ -6,9 +6,12 @@ import gugelcar.GugelCar;
 import gugelcar.Mensajes;
 
 import javax.swing.*;
+import javax.swing.text.DefaultCaret;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+
+import static javax.swing.text.DefaultCaret.ALWAYS_UPDATE;
 
 public class GugelCarView extends JFrame {
     private JButton buttonEjecutar;
@@ -17,7 +20,6 @@ public class GugelCarView extends JFrame {
     private JPanel contentPane;
     private JPanel buttonsPanel;
     private JPanel informationPanel;
-    private JPanel GeneralMsgPanel;
     private JPanel ScannerPanel;
     private JPanel RadarPanel;
     private JTextArea scannerTextArea;
@@ -93,6 +95,17 @@ public class GugelCarView extends JFrame {
        // canvasPanel.removeAll();
        // canvasPanel.add(new Canvas());
 
+
+        DefaultCaret caret = (DefaultCaret) scannerTextArea.getCaret();
+        caret.setUpdatePolicy(ALWAYS_UPDATE);
+
+        DefaultCaret caret1 = (DefaultCaret) radarTextArea.getCaret();
+        caret1.setUpdatePolicy(ALWAYS_UPDATE);
+        DefaultCaret caret2 = (DefaultCaret) generalMsgTextArea.getCaret();
+        caret2.setUpdatePolicy(ALWAYS_UPDATE);
+
+
+
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack();
 
@@ -132,8 +145,9 @@ public class GugelCarView extends JFrame {
     public void printToScanner(ArrayList<Float> scannerText) {
         String texto = "";
         for(Float i:scannerText)
-            texto += i.toString().substring(0,i.toString().indexOf('.') + 2) + "   ";
+            texto += i.toString().substring(0,i.toString().indexOf('.') + 2) + "      ";
         scannerTextArea.append("\n"+texto);
+
     }
 
     /**
@@ -143,6 +157,7 @@ public class GugelCarView extends JFrame {
      * @param message mensaje que se quiere imprimir
      */
     public void printToGeneralMsg(String message) {
+
         generalMsgTextArea.append("\n"+message);
     }
 
@@ -155,6 +170,7 @@ public class GugelCarView extends JFrame {
     public void printTraceUI(String path) {
         traceLabel.setText(" ");
         traceLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource(path)));
+
     }
 
     /**
