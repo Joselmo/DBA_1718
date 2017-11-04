@@ -4,9 +4,8 @@ import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
-public class Cerebro {
+class Cerebro {
     //DATOS MIEMBROS
 
     // Dato que nos indica si el agente a alcanzado el objetivo
@@ -37,7 +36,7 @@ public class Cerebro {
      *
      * @author Andres Molina Lopez
      */
-    public Cerebro(){
+    Cerebro(){
         reachedGoal = false;
 
         // Inicializacion sensores
@@ -51,7 +50,10 @@ public class Cerebro {
         pos_col_mapa = 5000;
 
         // Inicializacion del mapa mundo
-        mapaMundo = new int[1001][1001];
+        scannerFantasmita = new ArrayList<>(25);
+        mapaMundo = new int[10001][10001];
+        fantasmita_x = 5000;
+        fantasmita_y = 5000;
 
         // Inicializacion de las direcciones
         direcciones = new ArrayList<>(9);
@@ -73,7 +75,7 @@ public class Cerebro {
      * @author Andrés Molina López, Diego Iáñez Ávila, Jose Luis Martínez Ortiz
      */
     // @todo agregar la percepcion a scannerPulgarcito
-    public void processPerception(ArrayList<JsonObject> sensores){
+    void processPerception(ArrayList<JsonObject> sensores){
         for (JsonObject msg : sensores){
             // Comprobamos si se está usando el radar y en caso afirmativo rellenamos su matriz de percepción
             if(msg.get(Mensajes.AGENT_COM_SENSOR_RADAR) != null) {
@@ -95,6 +97,11 @@ public class Cerebro {
                     scannerCar.add(scanner.get(++i).asFloat());
                     scannerCar.add(scanner.get(++i).asFloat());
                 }
+
+                // Relleno del scanner para la funcion fantasmita en el cual se usa el scanner percibido al completo
+                for (int i=0; i<25; i++){
+                    scannerFantasmita.add(scanner.get(i).asFloat());
+                }
             }
         }
 
@@ -110,7 +117,7 @@ public class Cerebro {
      * @author Diego Iáñez Ávila, Jose Luis Martínez Ortiz
      * @return El comando a ejecutar
      */
-    public String nextAction(){
+    String nextAction(){
         String nextAction = Mensajes.AGENT_COM_ACCION_REFUEL;
 
         if(!reachedGoal && bateriaCar > 2)
@@ -179,7 +186,7 @@ public class Cerebro {
      *
      * @author Ángel Píñar Rivas
      */
-    public void refreshBatery(){
+    void refreshBatery(){
         bateriaCar = 100; // Como hemos repostado, la volvemos a poner al máximo
     }
 
@@ -190,7 +197,7 @@ public class Cerebro {
      * @param confirmacion indica si el resultado del movimiento fue válido
      * @param movimiento indica hacia donde se ha realizado el movimiento
      */
-    public void refreshMemory(boolean confirmacion, String movimiento){
+    void refreshMemory(boolean confirmacion, String movimiento){
         if (confirmacion) {
             // Se marca en la memoria que hemos pasado por la casilla
             mapaPulgarcito[pos_fila_mapa][pos_col_mapa]++;
@@ -251,15 +258,15 @@ public class Cerebro {
 //
 //    }
 
-    public boolean hasReachedGoal() {
+    boolean hasReachedGoal() {
         return reachedGoal;
     }
 
-    public ArrayList<Float> getScannerCar() {
+    ArrayList<Float> getScannerCar() {
         return scannerCar;
     }
 
-    public ArrayList<Integer> getRadarCar() {
+    ArrayList<Integer> getRadarCar() {
         return radarCar;
     }
 }

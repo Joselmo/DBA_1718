@@ -29,21 +29,7 @@ public class GugelCar extends SingleAgent{
     /**
      * Constructor
      *
-     * @author Diego Iáñez Ávila, Andrés Molina López
-     * @param aid ID del agente
-     * @throws Exception si no puede crear el agente
-     */
-    public GugelCar(String map, AgentID aid) throws Exception {
-        super(aid);
-        controllerID = new AgentID("Girtab");
-        cerebro = new Cerebro();
-        mapa = map;
-    }
-
-    /**
-     * Constructor
-     *
-     * @author Jose Luis Martínez Ortiz
+     * @author Diego Iáñez Ávila, Andrés Molina López, Jose Luis Martínez Ortiz
      * @param aid ID del agente
      * @throws Exception si no puede crear el agente
      */
@@ -129,39 +115,6 @@ public class GugelCar extends SingleAgent{
         }
 
         endSession();
-
-        /**
-         * A continuación versión anterior:
-         */
-        /*  * /
-        // Cuando esté implementado de verdad, la condición de salida del bucle no será esta
-        // y por lo tanto no se comprobará dos veces como ahora.
-        int it = 0;
-        boolean salir = false;
-
-        while (!salir) {
-            processPerception();
-
-            if(!cerebro.hasReachedGoal() && it < 1000) {
-
-                String nextAction = cerebro.nextAction();
-                System.out.println(nextAction);
-
-                if (nextAction.equals(Mensajes.AGENT_COM_ACCION_REFUEL))
-                    refuel();
-                else
-                    makeMove(nextAction);
-            }
-            else{
-                salir = true;
-            }
-
-            ++it;
-        }
-
-        // Terminar sesión
-        endSession();
-         */
     }
 
     /**
