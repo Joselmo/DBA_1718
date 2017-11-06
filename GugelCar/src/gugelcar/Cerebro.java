@@ -200,12 +200,15 @@ class Cerebro {
             // Se marca en la memoria que hemos pasado por la casilla
             mapaPulgarcito[pos_fila_mapa][pos_col_mapa]++;
 
-            // @todo Comprobar que al escribir datos del scannerFantasmita en mapaMundo lo hace bien
+            // @todo Por si acaso, que otra persona compruebe que escribe bien en mapaMundo
+            // Ángel lo ha probado en el mapa 1 pero aun así es una persona insegura.
+
+            //Escritura del mapaMundo
             //Que compruebe por si acaso que va a escribir en posiciones accesibles
             if((pos_fila_mapa>2 && pos_fila_mapa<9999) && (pos_col_mapa>2 && pos_col_mapa<9999)){
                 //i, j iteran sobre mapaMundo. x,y iteran sobre matriz radar
-                for(int i=pos_fila_mapa-2, x=0 ; i<pos_fila_mapa+2 ; i++, x++){
-                    for(int j=pos_col_mapa-2, y=0 ; j<pos_col_mapa+2 ; j++, y++){
+                for(int i=pos_fila_mapa-2, x=0 ; i<=pos_fila_mapa+2 ; i++, x++){
+                    for(int j=pos_col_mapa-2, y=0 ; j<=pos_col_mapa+2 ; j++, y++){
                         mapaMundo[i][j] = radarFantasmita[x][y]+1;
                     }
                 }
