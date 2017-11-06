@@ -25,7 +25,7 @@ class Cerebro {
     private final ArrayList<String> direcciones;
 
     // Atributos propios de Fantasmita(TM)
-    private ArrayList<Integer>  radarFantasmita;
+    private int [][]  radarFantasmita;
     private int [][] mapaMundo;
     private int fantasmita_x;       // Variable X de origen del algoritmo
     private int fantasmita_y;       // Variable Y de origen del algoritmo
@@ -50,10 +50,9 @@ class Cerebro {
         pos_col_mapa = 5000;
 
         // Inicializacion del mapa mundo
-        radarFantasmita = new ArrayList<>(25);
+        radarFantasmita = new int[5][5];
         mapaMundo = new int[10001][10001];
-        fantasmita_x = 5000;
-        fantasmita_y = 5000;
+
 
         // Inicializacion de las direcciones
         direcciones = new ArrayList<>(9);
@@ -88,7 +87,7 @@ class Cerebro {
 
                 // Relleno del radar para la funcion fantasmita en el cual se usa el radar percibido al completo
                 for (int i=0; i<25; i++){
-                    radarFantasmita.add(radar.get(i).asInt());
+                    radarFantasmita[i/5][i%5]=radar.get(i).asInt();
                 }
             }
 
@@ -201,7 +200,16 @@ class Cerebro {
             // Se marca en la memoria que hemos pasado por la casilla
             mapaPulgarcito[pos_fila_mapa][pos_col_mapa]++;
 
-            // @todo escribir datos del scannerFantasmita en mapaMundo
+            // @todo Comprobar que al escribir datos del scannerFantasmita en mapaMundo lo hace bien
+            //Que compruebe por si acaso que va a escribir en posiciones accesibles
+            if((pos_fila_mapa>2 && pos_fila_mapa<9999) && (pos_col_mapa>2 && pos_col_mapa<9999)){
+                //i, j iteran sobre mapaMundo. x,y iteran sobre matriz radar
+                for(int i=pos_fila_mapa-2, x=0 ; i<pos_fila_mapa+2 ; i++, x++){
+                    for(int j=pos_col_mapa-2, y=0 ; j<pos_col_mapa+2 ; j++, y++){
+                        mapaMundo[i][j] = radarFantasmita[x][y]+1;
+                    }
+                }
+            }
             // Se escribe los datos del scanner en mapaMundo
 
 
