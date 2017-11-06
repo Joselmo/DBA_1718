@@ -200,6 +200,10 @@ class Cerebro {
             // Se marca en la memoria que hemos pasado por la casilla
             mapaPulgarcito[pos_fila_mapa][pos_col_mapa]++;
 
+            //////////////////////////////////////////////////////////////////////
+            // ¿QUIZÁS ESTE CACHO (O PARTE DE ÉL) DEBERÍA ESTAR EN PROCESSPERCEPTION?
+            //////////////////////////////////////////////////////////////////////
+
             // @todo Por si acaso, que otra persona compruebe que escribe bien en mapaMundo
             // Ángel lo ha probado en el mapa 1 pero aun así es una persona insegura.
 
@@ -213,8 +217,79 @@ class Cerebro {
                     }
                 }
             }
-            // Se escribe los datos del scanner en mapaMundo
 
+            /* Seguramente haya una forma más sencilla de comprobar si al ver un objetivo es accesible o no, pero no se
+            me ocurre.
+
+            ¡¡OJO!! el código esta super incompleto y muy en sucio (EN DESARROLLO)
+            así que no me vengais con tonterías que ya lo sé.
+
+            Explicacion del lado izquierdo:
+            Comprueba si hay muro u objetivo por su derecha (el objetivo puede darse cuando se descubra en una esquina)
+            Si lo hay:
+                Comprueba si hay muro u objetivo por encima
+                Si lo hay:
+                    Comprueba si hay muro u objetivo por abajo
+                    Si lo hay: Objetivo bloqueado (o su acceso aun no se ha descubierto)
+             * /
+
+            //@todo Lo comentado dentro de los if + que otra persona me revise si los if están bien planteados
+
+            // ¿if fantasmita no lanzado?
+            for(int j=0 ; j<5 ; j++){ //Recorre el lado
+                 if(radarFantasmita[0][j] == 2){ //lado izquierdo
+                     if((radarFantasmita[1][j] ==1) || radarFantasmita[1][j]==2){
+                         if(j>0 && ((radarFantasmita[0][j-1] ==1) || (radarFantasmita[0][j-1] ==2))){
+                             if(j<4 && ((radarFantasmita[0][j+1] ==1) || (radarFantasmita[0][j+1] ==2))){
+                                 // accesible = false
+                                 // Lanzar fantasmita
+                                 // fantasmita_x = pos_fila_mapa, fantasmita_y = pos_col_mapa
+                             }
+                         }
+                     }
+                 }
+
+                 if(radarFantasmita[5][j] == 2){ //lado derecho
+                     if((radarFantasmita[4][j] ==1) || (radarFantasmita[4][j] ==2)) {
+                         if(j>0 && ((radarFantasmita[5][j-1] ==1) || (radarFantasmita[5][j-1] ==2))){
+                             if(j<4 && ((radarFantasmita[5][j+1] ==1) || (radarFantasmita[5][j+1] ==2))){
+                                 // accesible = false
+                                 // Lanzar fantasmita
+                                 // fantasmita_x = pos_fila_mapa, fantasmita_y = pos_col_mapa
+                             }
+                         }
+                     }
+                 }
+
+                 if(radarFantasmita[j][0] == 2){ //lado superior
+                     if((radarFantasmita[j][1] ==0) || (radarFantasmita[j][1] ==2)){
+                         if(j>0 && ((radarFantasmita[j-1][0] ==1) || (radarFantasmita[j-1][0] ==2))){
+                             if(j<4 && ((radarFantasmita[j+1][0] ==1) || (radarFantasmita[j+1][0] ==2))){
+                                 // accesible = false
+                                 // Lanzar fantasmita
+                                 // fantasmita_x = pos_fila_mapa, fantasmita_y = pos_col_mapa
+                             }
+                         }
+                     }
+                 }
+
+                if(radarFantasmita[j][5] == 2){ //lado inferior
+                    if((radarFantasmita[j][4] !=0) && (radarFantasmita[j][4] !=2)){
+                        if(j>0 && ((radarFantasmita[j-1][5] ==1) || (radarFantasmita[j-1][5] ==2))){
+                            if(j<4 && ((radarFantasmita[j+1][5] ==1) || (radarFantasmita[j+1][5] ==2))){
+                                // accesible = false
+                                // Lanzar fantasmita
+                                // fantasmita_x = pos_fila_mapa, fantasmita_y = pos_col_mapa
+                            }
+                        }
+                    }
+                }
+            }
+            /**/
+
+            ///////////////////////////////////////////////////////////////
+            // FIN DEL CACHO
+            ///////////////////////////////////////////////////////////////
 
             // Se desplaza la posicion en la matriz memoria segun el movimiento decidido
             switch (movimiento) {
