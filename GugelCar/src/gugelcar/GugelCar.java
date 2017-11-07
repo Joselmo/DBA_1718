@@ -260,5 +260,8 @@ public class GugelCar extends SingleAgent{
 
         view.printToScanner(cerebro.getScannerCar());
         view.printToRadar(cerebro.getRadarCar());
+
+        // Pintar el contenido del radar completo en el mapa
+        view.updateMap(cerebro.getPosX(), cerebro.getPosY(), cerebro.getCompleteRadar());
     }
 }

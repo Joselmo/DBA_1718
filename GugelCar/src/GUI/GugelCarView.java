@@ -25,6 +25,7 @@ public class GugelCarView extends JFrame {
     private JTextArea radarTextArea;
     private JLabel traceLabel;
     private JPanel canvasPanel;
+    private TraceMap traceMap;
 
     private GugelCar gugelcar;
 
@@ -90,8 +91,6 @@ public class GugelCarView extends JFrame {
         radarTextArea.setEditable(false);
         generalMsgTextArea.setEditable(false);
         buttonEjecutar.setEnabled(true);
-       // canvasPanel.removeAll();
-       // canvasPanel.add(new Canvas());
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack();
@@ -161,10 +160,12 @@ public class GugelCarView extends JFrame {
      * Dibujar la percepción actual en el mapa de la GUI
      *
      * @author Diego Iáñez Ávila
+     * @param x Posición x del agente
+     * @param y Posición y del agente
      * @param radar Percepción del radar
      */
-    public void updateMap(ArrayList<Integer> radar){
-
+    public void updateMap(int x, int y, ArrayList<Integer> radar){
+        traceMap.updateMap(x, y, radar);
     }
 
     /**

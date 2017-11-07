@@ -87,6 +87,7 @@ class Cerebro {
                 }
 
                 // Relleno del radar para la funcion fantasmita en el cual se usa el radar percibido al completo
+                radarFantasmita.clear();
                 for (int i=0; i<25; i++){
                     radarFantasmita.add(radar.get(i).asInt());
                 }
@@ -267,5 +268,23 @@ class Cerebro {
 
     ArrayList<Integer> getRadarCar() {
         return radarCar;
+    }
+
+    /**
+     * Obtener el contenido completo del radar
+     *
+     * @author Diego Iáñez Ávila
+     * @return El radar completo
+     */
+    ArrayList<Integer> getCompleteRadar(){
+        return radarFantasmita;
+    }
+
+    int getPosX(){
+        return pos_col_mapa;
+    }
+
+    int getPosY(){
+        return pos_fila_mapa;
     }
 }
