@@ -13,6 +13,7 @@ class Cerebro {
 
     // Elementos para la percepcion inmediata del agente
     private ArrayList<Integer> radarCar;    // Matriz que representa la percepcion del sensor radar
+    private ArrayList<Integer> completeRadar;    // Matriz que representa la percepcion del sensor radar
     private ArrayList<Float> scannerCar;    // Matriz que representa la percepcion del sensor scanner
     private int bateriaCar;                 // Porcentaje de carga de la bateria
 
@@ -43,6 +44,7 @@ class Cerebro {
 
         // Inicializacion sensores
         radarCar = new ArrayList<>(9);
+        completeRadar = new ArrayList<>(25);
         scannerCar = new ArrayList<>(9);
         bateriaCar = 0;     // Se inicializa a 0 puesto que desconocemos su estado real
 
@@ -88,9 +90,10 @@ class Cerebro {
                 }
 
                 // Relleno del radar para la funcion fantasmita en el cual se usa el radar percibido al completo
-                radarFantasmita.clear();
+                completeRadar.clear();
                 for (int i=0; i<25; i++){
                     radarFantasmita[i/5][i%5]=radar.get(i).asInt();
+                    completeRadar.add(radar.get(i).asInt());
                 }
             }
 
@@ -410,7 +413,7 @@ class Cerebro {
      * @return El radar completo
      */
     ArrayList<Integer> getCompleteRadar(){
-        return radarFantasmita;
+        return completeRadar;
     }
 
     int getPosX(){
