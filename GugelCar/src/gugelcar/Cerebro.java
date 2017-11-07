@@ -25,6 +25,7 @@ class Cerebro {
     private final ArrayList<String> direcciones;
 
     // Atributos propios de Fantasmita(TM)
+    private boolean fantasma_activo;
     private int [][]  radarFantasmita;
     private int [][] mapaMundo;
     private int fantasmita_x;       // Variable X de origen del algoritmo
@@ -38,6 +39,7 @@ class Cerebro {
      */
     Cerebro(){
         reachedGoal = false;
+        fantasma_activo = false;
 
         // Inicializacion sensores
         radarCar = new ArrayList<>(9);
@@ -202,6 +204,8 @@ class Cerebro {
 
             //////////////////////////////////////////////////////////////////////
             // ¿QUIZÁS ESTE CACHO (O PARTE DE ÉL) DEBERÍA ESTAR EN PROCESSPERCEPTION?
+            // Despues de haber codificado esto me parece que se ha vuelto un metodo demasiado grande
+            // dividlo como veais
             //////////////////////////////////////////////////////////////////////
 
             // @todo Por si acaso, que otra persona compruebe que escribe bien en mapaMundo
@@ -224,62 +228,86 @@ class Cerebro {
             ¡¡OJO!! el código esta super incompleto y muy en sucio (EN DESARROLLO)
             así que no me vengais con tonterías que ya lo sé.
 
-            Explicacion del lado izquierdo:
+            Explicacion del (por ejemplo) lado izquierdo:
+            El for recorre to.do el lado izquierdo, y por cada casilla:
             Comprueba si hay muro u objetivo por su derecha (el objetivo puede darse cuando se descubra en una esquina)
             Si lo hay:
                 Comprueba si hay muro u objetivo por encima
                 Si lo hay:
                     Comprueba si hay muro u objetivo por abajo
                     Si lo hay: Objetivo bloqueado (o su acceso aun no se ha descubierto)
+
+             Nota del autor (Ángel): Esto da falsos positivos en los casos en los que se descubra 3 casillas de
+             objetivo del tirón o dos casillas y una de ellas tenga un muro arriba o abajo (en el caso del ejemplo
+             expuesto)
+
+             Propuesta (ejemplificada para lado izquierdo)(posiblemente se pueda escribir el codigo mas simple):
+             Recorrer el lado de arriba a abajo. Si encontramos casilla objetivo:
+                if(por arriba hay muro o desconocido && por la derecha hay muro o desconocido){
+                    if(por abajo hay muro){
+                        dejar de recorrer lados (un break del for inicial o algo asi)
+                        lanzar fantasmita y to.do el rollo
+                    } else {
+                        while(por abajo hay objetivo){
+                            moverse_abajo
+                            if(por derecha no hay muro)
+                                salir del for(el objetivo está accesible)
+                        }
+                        if(por abajo hay muro o desconocido){
+                            dejar de recorrer lados (un break del for inicial o algo asi)
+                            lanzar fantasmita y to.do el rollo
+                        }
+                    }
              * /
 
-            //@todo Lo comentado dentro de los if + que otra persona me revise si los if están bien planteados
+            //@todo Implementar version mejor? Averiguar donde poner este cacho (no creo que este sea su sitio)
 
-            // ¿if fantasmita no lanzado?
-            for(int j=0 ; j<5 ; j++){ //Recorre el lado
-                 if(radarFantasmita[0][j] == 2){ //lado izquierdo
-                     if((radarFantasmita[1][j] ==1) || radarFantasmita[1][j]==2){
-                         if(j>0 && ((radarFantasmita[0][j-1] ==1) || (radarFantasmita[0][j-1] ==2))){
-                             if(j<4 && ((radarFantasmita[0][j+1] ==1) || (radarFantasmita[0][j+1] ==2))){
-                                 // accesible = false
-                                 // Lanzar fantasmita
-                                 // fantasmita_x = pos_fila_mapa, fantasmita_y = pos_col_mapa
-                             }
-                         }
-                     }
-                 }
+            if(!fantasma_activo) {
+                for (int j = 0; j < 5; j++) { //Recorre el lado
+                    if (radarFantasmita[0][j] == 2) { //lado izquierdo
+                        if ((radarFantasmita[1][j] == 1) || radarFantasmita[1][j] == 2) {
+                            if (j > 0 && ((radarFantasmita[0][j - 1] == 1) || (radarFantasmita[0][j - 1] == 2))) {
+                                if (j < 4 && ((radarFantasmita[0][j + 1] == 1) || (radarFantasmita[0][j + 1] == 2))) {
+                                    fantasma_activo = true;
+                                    fantasmita_x = pos_fila_mapa;
+                                    fantasmita_y = pos_col_mapa;
+                                }
+                            }
+                        }
+                    }
 
-                 if(radarFantasmita[5][j] == 2){ //lado derecho
-                     if((radarFantasmita[4][j] ==1) || (radarFantasmita[4][j] ==2)) {
-                         if(j>0 && ((radarFantasmita[5][j-1] ==1) || (radarFantasmita[5][j-1] ==2))){
-                             if(j<4 && ((radarFantasmita[5][j+1] ==1) || (radarFantasmita[5][j+1] ==2))){
-                                 // accesible = false
-                                 // Lanzar fantasmita
-                                 // fantasmita_x = pos_fila_mapa, fantasmita_y = pos_col_mapa
-                             }
-                         }
-                     }
-                 }
+                    if (radarFantasmita[5][j] == 2) { //lado derecho
+                        if ((radarFantasmita[4][j] == 1) || (radarFantasmita[4][j] == 2)) {
+                            if (j > 0 && ((radarFantasmita[5][j - 1] == 1) || (radarFantasmita[5][j - 1] == 2))) {
+                                if (j < 4 && ((radarFantasmita[5][j + 1] == 1) || (radarFantasmita[5][j + 1] == 2))) {
+                                    fantasma_activo = true;
+                                    fantasmita_x = pos_fila_mapa;
+                                    fantasmita_y = pos_col_mapa;
+                                }
+                            }
+                        }
+                    }
 
-                 if(radarFantasmita[j][0] == 2){ //lado superior
-                     if((radarFantasmita[j][1] ==0) || (radarFantasmita[j][1] ==2)){
-                         if(j>0 && ((radarFantasmita[j-1][0] ==1) || (radarFantasmita[j-1][0] ==2))){
-                             if(j<4 && ((radarFantasmita[j+1][0] ==1) || (radarFantasmita[j+1][0] ==2))){
-                                 // accesible = false
-                                 // Lanzar fantasmita
-                                 // fantasmita_x = pos_fila_mapa, fantasmita_y = pos_col_mapa
-                             }
-                         }
-                     }
-                 }
+                    if (radarFantasmita[j][0] == 2) { //lado superior
+                        if ((radarFantasmita[j][1] == 0) || (radarFantasmita[j][1] == 2)) {
+                            if (j > 0 && ((radarFantasmita[j - 1][0] == 1) || (radarFantasmita[j - 1][0] == 2))) {
+                                if (j < 4 && ((radarFantasmita[j + 1][0] == 1) || (radarFantasmita[j + 1][0] == 2))) {
+                                    fantasma_activo = true;
+                                    fantasmita_x = pos_fila_mapa;
+                                    fantasmita_y = pos_col_mapa;
+                                }
+                            }
+                        }
+                    }
 
-                if(radarFantasmita[j][5] == 2){ //lado inferior
-                    if((radarFantasmita[j][4] !=0) && (radarFantasmita[j][4] !=2)){
-                        if(j>0 && ((radarFantasmita[j-1][5] ==1) || (radarFantasmita[j-1][5] ==2))){
-                            if(j<4 && ((radarFantasmita[j+1][5] ==1) || (radarFantasmita[j+1][5] ==2))){
-                                // accesible = false
-                                // Lanzar fantasmita
-                                // fantasmita_x = pos_fila_mapa, fantasmita_y = pos_col_mapa
+                    if (radarFantasmita[j][5] == 2) { //lado inferior
+                        if ((radarFantasmita[j][4] != 0) && (radarFantasmita[j][4] != 2)) {
+                            if (j > 0 && ((radarFantasmita[j - 1][5] == 1) || (radarFantasmita[j - 1][5] == 2))) {
+                                if (j < 4 && ((radarFantasmita[j + 1][5] == 1) || (radarFantasmita[j + 1][5] == 2))) {
+                                    fantasma_activo = true;
+                                    fantasmita_x = pos_fila_mapa;
+                                    fantasmita_y = pos_col_mapa;
+                                }
                             }
                         }
                     }
@@ -334,14 +362,33 @@ class Cerebro {
         }
     }
 
-//    /**
-//     * Algoritmo que escanea los bordes del muro proximo al objetivo con el fin de comprobar si hay GAMEOVER
-//     * @author David Vargas Carrillo, Angel Piñar Rivas
-//     * @return
-//     */
-//    private boolean Fantasmita() {
-//
-//    }
+    /**
+    * Algoritmo que escanea los bordes del muro proximo al objetivo con el fin de comprobar si hay GAMEOVER
+     * @author David Vargas Carrillo, Angel Piñar Rivas
+     * @return True si el objetivo no es alcanzable, false si el fantasma no está activo/no puede decir si es alcanzable
+     *
+     */
+    boolean Fantasmita() {
+        boolean camino_cerrado = false;
+        if(fantasma_activo){
+            //@todo El rollo de bordear el murito
+            /*
+            Sugerencia: hacer un """pulgarcito""" marcando por donde ha pasado (habría que crear una matriz
+            nueva del mapa, sacamos un cacho de 50x50 o 100x100, no hace falta copiarla entera).
+            El fantasmita buscara en sus 8 casillas adyacentes una de camino que esté junto
+            a un muro visible por esas 8 casillas adyacentes (para evitar que se vaya a un muro del otro lado
+            de la calle) y que además no haya pasado por ahí (para que no vuelva atrás).
+            Si llega al punto de que solo puede ir a sitios marcados, quiere decir que ha dado la vuelta al muro
+            y por tanto es inalcanzable (A NO SER QUE HAYA PASADO POR ENCIMA DEL OBJETIVO, este caso se podría dar
+            y por tanto hay que controlarlo.)
+             */
+        }
+        return camino_cerrado;
+    }
+
+    boolean isFantasmaActivo(){
+        return fantasma_activo;
+    }
 
     boolean hasReachedGoal() {
         return reachedGoal;
