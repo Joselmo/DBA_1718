@@ -81,12 +81,18 @@ public class GugelCar extends SingleAgent{
     public void execute(){
         int it=0;
         boolean salir=false;
+        boolean objetivo_bloqueado=false;
 
         while(!salir){
             switch (status){
                 case Mensajes.AGENT_STATUS_PERCIBIENDO:
                     processPerception();
-                    if(cerebro.hasReachedGoal() || it>1500){
+
+                    if(it%20==0 && cerebro.isFantasmaActivo()){
+                        objetivo_bloqueado = cerebro.Fantasmita();
+                    }
+
+                    if(cerebro.hasReachedGoal() || it>1500 || objetivo_bloqueado){
                         status = Mensajes.AGENT_STATUS_FINALIZADO;
                     } else {
                         status = Mensajes.AGENT_STATUS_ACTUANDO;
