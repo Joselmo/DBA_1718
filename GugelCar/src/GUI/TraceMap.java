@@ -17,7 +17,7 @@ public class TraceMap extends JPanel {
 
     private int mapSize = 10001;
     // Para reducir el tamaño de la imagen. Con tamaño completo tarda demasiado en dibujarla.
-    private int mapReduction = 6000;
+    private int mapReduction = 9000;
     private int viewportSize = 500;
 
     /**
