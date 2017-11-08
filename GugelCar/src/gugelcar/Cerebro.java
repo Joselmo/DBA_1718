@@ -622,27 +622,6 @@ class Cerebro {
                     System.out.print("\n");
                 }
 
-
-
-
-                // Sleep para ver los resultados
-                System.out.println("ME VOY A DORMIR");
-                if (fantasma_activo) System.out.println("FANTASMA ACTIVO");
-                else System.out.println("FANTASMA INACTIVO");
-                try
-                {
-                    Thread.sleep(1000);
-                }
-                catch(InterruptedException ex)
-                {
-                    Thread.currentThread().interrupt();
-                }
-
-
-
-
-
-
             // LADO DERECHO
             } else if(radarFantasmita[i][4] == 2) {
                 if(i==0){
@@ -690,25 +669,6 @@ class Cerebro {
                 }
 
 
-
-                // Sleep para ver los resultados
-                System.out.println("ME VOY A DORMIR");
-                if (fantasma_activo) System.out.println("FANTASMA ACTIVO");
-                else System.out.println("FANTASMA INACTIVO");
-                try
-                {
-                    Thread.sleep(1000);
-                }
-                catch(InterruptedException ex)
-                {
-                    Thread.currentThread().interrupt();
-                }
-
-
-
-
-
-
             // LADO SUPERIOR
             } else if(radarFantasmita[0][i] == 2) {
                 comprobarFilaAccesible(0);
@@ -720,22 +680,6 @@ class Cerebro {
                     }
                     System.out.print("\n");
                 }
-
-
-                // Sleep para ver los resultados
-                System.out.println("ME VOY A DORMIR");
-                if (fantasma_activo) System.out.println("FANTASMA ACTIVO");
-                else System.out.println("FANTASMA INACTIVO");
-                try
-                {
-                    Thread.sleep(1000);
-                }
-                catch(InterruptedException ex)
-                {
-                    Thread.currentThread().interrupt();
-                }
-
-
 
 
             // LADO INFERIOR
@@ -750,19 +694,6 @@ class Cerebro {
                     System.out.print("\n");
                 }
 
-
-                // Sleep para ver los resultados
-                System.out.println("ME VOY A DORMIR");
-                if (fantasma_activo) System.out.println("FANTASMA ACTIVO");
-                else System.out.println("FANTASMA INACTIVO");
-                try
-                {
-                    Thread.sleep(1000);
-                }
-                catch(InterruptedException ex)
-                {
-                    Thread.currentThread().interrupt();
-                }
             }
         }
     }
