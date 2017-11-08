@@ -551,23 +551,6 @@ class Cerebro {
      */
 
     private void comprobarObjetivoVisible(){
-        //////////////////////////////// TOCHACO CON IDEAS GUAYS DE MEJORA /////////////////////////////////////////
-
-        // @todo mejora 1:
-        // Poner esto en la funcion Fantasmita y llamar cada vez a la funcion, y que esta decida ahi si lo lanza
-        // o no
-
-        // @todo mejora 2:
-        // Realmente se sabe de antemano hacia donde esta el objetivo, por tanto solo es necesario comprobar en uno
-        // de los bordes y no recorrer los cuatro
-
-        // @todo mejora 3:
-        // Tambien es posible saber si tenemos la posibilidad de encontrarnos con el objetivo en nuestra area, a
-        // partir de la distancia euclidea al mismo. Por tanto, definiendo una distancia max (que el objetivo se
-        // encuentre en una de las esquinas) y comprobando la distancia a la que estamos mediante el scanner,
-        // podemos saber si tenemos que lanzarnos a comprobar lo del fantasma o no
-
-        ////////////////////////////// FIN TOCHACO CON IDEAS GUAYS DE MEJORA ///////////////////////////////////////
 
         for(int i=0 ; i<5 ; i++){
             // LADO IZQUIERDO
