@@ -1,4 +1,4 @@
-package GUI;
+package practica2.GUI;
 
 import javax.swing.*;
 import java.awt.event.*;

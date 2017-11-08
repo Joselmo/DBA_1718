@@ -1,6 +1,6 @@
-package gugelcar;
+package practica2.gugelcar;
 
-import GUI.GugelCarView;
+import practica2.GUI.GugelCarView;
 import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;

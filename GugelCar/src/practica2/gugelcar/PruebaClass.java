@@ -1,7 +1,7 @@
-package gugelcar;
+package practica2.gugelcar;
 
-import GUI.AgentNameCapture;
-import GUI.GugelCarView;
+import practica2.GUI.AgentNameCapture;
+import practica2.GUI.GugelCarView;
 
 public class PruebaClass {
 

@@ -1,13 +1,12 @@
-package GUI;
+package practica2.GUI;
 
 import es.upv.dsic.gti_ia.core.AgentID;
 import es.upv.dsic.gti_ia.core.AgentsConnection;
-import gugelcar.GugelCar;
-import gugelcar.Mensajes;
+import practica2.gugelcar.GugelCar;
+import practica2.gugelcar.Mensajes;
 
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;
-import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 
@@ -77,7 +76,7 @@ public class GugelCarView extends JFrame {
      */
     public GugelCarView(String mapa) {
         setContentPane(contentPane);
-        setTitle("DBA Practica 2: gugelcar.gugelcar.GugelCar");
+        setTitle("DBA Practica 2: practica2.gugelcar.practica2.gugelcar.GugelCar");
         setSize(650, 400);
         setMapIndicator(mapa);
         initComponents();
@@ -173,7 +172,7 @@ public class GugelCarView extends JFrame {
     }
 
     /**
-     * Dibujar la percepción actual en el mapa de la GUI
+     * Dibujar la percepción actual en el mapa de la practica2.GUI
      *
      * @author Diego Iáñez Ávila
      * @param x Posición x del agente

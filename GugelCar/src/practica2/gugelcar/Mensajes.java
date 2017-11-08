@@ -1,4 +1,4 @@
-package gugelcar;
+package practica2.gugelcar;
 
 /**
  * Enum que contiene los mensajes de la aplicación

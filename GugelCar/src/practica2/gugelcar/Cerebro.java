@@ -1,10 +1,9 @@
-package gugelcar;
+package practica2.gugelcar;
 
 import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
 
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 class Cerebro {
     //DATOS MIEMBROS
