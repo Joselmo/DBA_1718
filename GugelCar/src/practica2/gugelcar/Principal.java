@@ -3,7 +3,7 @@ package practica2.gugelcar;
 import practica2.GUI.AgentNameCapture;
 import practica2.GUI.GugelCarView;
 
-public class PruebaClass {
+public class Principal {
 
     public static void main(String[] args) {
         // Ventana de captura de nombre y mapa
