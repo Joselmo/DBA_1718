@@ -189,8 +189,6 @@ public class GugelCarView extends JFrame {
      * @author David Vargas Carrillo, Jose Luis Martínez Ortiz
      */
     private void onEjecutar(){
-        // Completar
-        // @todo implementar mecanismos para parar la ejecucion en caso de que se reciban erores tipo BAD_MAP
         try {
             gugelcar = new GugelCar(mapaSeleccionado, new AgentID(nombreAgente),this);
 
