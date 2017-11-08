@@ -27,7 +27,7 @@ class Cerebro {
 
     // Atributos propios de Fantasmita(TM)
     private boolean fantasma_activo;
-    private int [][]  radarFantasmita;
+    private int [][] radarFantasmita;
     private int [][] mapaMundo;
     private int fantasmita_x;       // Variable X de origen del algoritmo
     private int fantasmita_y;       // Variable Y de origen del algoritmo
@@ -56,7 +56,6 @@ class Cerebro {
         // Inicializacion del mapa mundo
         radarFantasmita = new int[5][5];
         mapaMundo = new int[10001][10001];
-
 
         // Inicializacion de las direcciones
         direcciones = new ArrayList<>(9);
@@ -91,8 +90,8 @@ class Cerebro {
 
                 // Relleno del radar para la funcion fantasmita en el cual se usa el radar percibido al completo
                 completeRadar.clear();
-                for (int i=0; i<25; i++){
-                    radarFantasmita[i/5][i%5]=radar.get(i).asInt();
+                for (int i = 0; i < 25; i++){
+                    radarFantasmita[i / 5][i % 5] = radar.get(i).asInt();
                     completeRadar.add(radar.get(i).asInt());
                 }
             }
@@ -217,13 +216,15 @@ class Cerebro {
 
             //Escritura del mapaMundo
             //Que compruebe por si acaso que va a escribir en posiciones accesibles
-            if((pos_fila_mapa>2 && pos_fila_mapa<9999) && (pos_col_mapa>2 && pos_col_mapa<9999)){
+            if((pos_fila_mapa > 2 && pos_fila_mapa < 9999) && (pos_col_mapa > 2 && pos_col_mapa < 9999)){
                 //i, j iteran sobre mapaMundo. x,y iteran sobre matriz radar
-                for(int i=pos_fila_mapa-2, x=0 ; i<=pos_fila_mapa+2 ; i++, x++){
-                    for(int j=pos_col_mapa-2, y=0 ; j<=pos_col_mapa+2 ; j++, y++){
+                for(int i = pos_fila_mapa - 2, x = 0; i <= pos_fila_mapa + 2; i++, x++){
+                    for(int j = pos_col_mapa - 2, y = 0; j <= pos_col_mapa + 2; j++, y++){
                         mapaMundo[i][j] = radarFantasmita[x][y]+1;
                     }
                 }
+            } else {
+                System.err.println("Se ha intentado escribir en una posicion invalida de mapaMundo");
             }
 
             /* Seguramente haya una forma más sencilla de comprobar si al ver un objetivo es accesible o no, pero no se
@@ -262,7 +263,128 @@ class Cerebro {
                             lanzar fantasmita y to.do el rollo
                         }
                     }
-             * /
+             */
+
+
+
+
+
+
+
+            /*
+             * Ahora se va a comprobar si el fantasma se puede lanzar en el caso de que no este ya ejecutandose.
+             * El objetivo es encontrar una situacion donde, a priori, el objetivo parezca inaccesible y haya que
+             * comprobarlo a la hora de determinar una situacion GAMEOVER.
+             */
+
+            //////////////////////////////// TOCHACO CON IDEAS GUAYS DE MEJORA /////////////////////////////////////////
+
+            // @todo mejora 1:
+            // Poner esto en la funcion Fantasmita y llamar cada vez a la funcion, y que esta decida ahi si lo lanza
+            // o no
+
+            // @todo mejora 2:
+            // Realmente se sabe de antemano hacia donde esta el objetivo, por tanto solo es necesario comprobar en uno
+            // de los bordes y no recorrer los cuatro
+
+            // @todo mejora 3:
+            // Tambien es posible saber si tenemos la posibilidad de encontrarnos con el objetivo en nuestra area, a
+            // partir de la distancia euclidea al mismo. Por tanto, definiendo una distancia max (que el objetivo se
+            // encuentre en una de las esquinas) y comprobando la distancia a la que estamos mediante el scanner,
+            // podemos saber si tenemos que lanzarnos a comprobar lo del fantasma o no
+
+            ////////////////////////////// FIN TOCHACO CON IDEAS GUAYS DE MEJORA ///////////////////////////////////////
+            // @todo comprobar la eficiencia de todo esto
+
+            boolean lanzar_fantasma = false;
+
+            if (!fantasma_activo) {
+                // El algoritmo se divide en los cuatro bordes de la matriz, donde se pueda encontrar el objetivo
+                // Borde izquierdo
+                boolean seguir = true;
+                boolean obj_encontrado = false;
+
+                for (int fil = 0; fil < 5 && seguir; fil++) {
+                    // Se busca la casilla objetivo
+                    if ((radarFantasmita[fil][0] == 2) && (!obj_encontrado)) {
+                        obj_encontrado = true;
+                        // Se reinicia la fila para hacer una busqueda por toda la columna de la condicion Fantasmita
+                        fil = 0;
+                    }
+                    // Cuando la casilla objetivo se encuentra en este borde
+                    if (obj_encontrado) {
+                        // Si la casilla superior es muro o desconocido y la casilla derecha es muro
+                        if ((fil == 0 && radarFantasmita[fil][1] == 1) ||
+                                radarFantasmita[fil - 1][0] == 1 && radarFantasmita[fil][1] == 1) {
+                            // Si, estando en el objetivo, se encuentra un muro en la casilla inferior -> parar
+                            // y lanzar fantasmita
+                            if ((radarFantasmita[fil][0] == 2) && (fil < 4) && (radarFantasmita[fil + 1][0] == 1)) {
+                                lanzar_fantasma = true;
+                                seguir = false;
+                            // Si no estamos en el objetivo o estando en el objetivo la casilla inferior no es un muro
+                            } else {
+                                // O bien es objetivo -> buscamos muros a la derecha
+                                while ((fil < 4) && (radarFantasmita[fil + 1][0] == 2)) {
+                                    // Nos movemos una casilla abajo
+                                    fil++;
+                                    // Comprobamos que a la derecha sigue habiendo muro
+                                    if (radarFantasmita[fil][1] != 1) {
+                                        // Si no hay, hay un acceso al objetivo
+                                        seguir = false;
+                                    }
+                                }
+                                // O bien es muro o calle -> buscamos el objetivo en casillas inferiores y si hay
+                                // muro a la derecha
+                                boolean obj_aqui = false;
+                                boolean muro = false;
+                                while ((fil < 4) && (radarFantasmita[fil + 1][1] == 1) && !muro && seguir) {
+                                    fil++;
+                                    // Encuentro el objetivo
+                                    if (radarFantasmita[fil][0] == 2)
+                                       obj_aqui = true;
+                                    // En lugar del objetivo encuentro un muro que cierra el bloque -> paramos
+                                    else if (radarFantasmita[fil][0] == 1) {
+                                        muro = true;
+                                        seguir = false;
+                                    }
+                                }
+                                // Si se ha encontrado el objetivo antes que el muro, se lanza el fantasma
+                                if (obj_aqui) {
+                                    lanzar_fantasma = true;
+                                    seguir = false;
+                                }
+                                // O bien es desconocido (hemos llegado al final del borde)
+                                // Si se llega aqui es que el objetivo esta en la esquina. Podemos tomar dos decisiones,
+                                // o dejar que el coche se aproxime una casilla mas o lanzar el fantasma ya
+                                // Se opta por lanzar el fantasma
+                                if (seguir && radarFantasmita[fil][0] == 2) {
+                                    lanzar_fantasma = true;
+                                    seguir = false;
+                                }
+                            }
+                        }
+                    }
+                }
+                // a partir de ahora comprobar tambien que el objetivo no esta encontrado en los for
+                // Comprobar resto de bordes
+            }
+            // @todo implementar lanzamiento de fantasma
+            if (lanzar_fantasma) {
+                fantasma_activo = true;
+                // Funcion Fantasmita
+            }
+
+            /*
+
+
+
+
+
+
+
+
+
+
 
             //@todo Implementar version mejor? Averiguar donde poner este cacho (no creo que este sea su sitio)
 
@@ -316,7 +438,7 @@ class Cerebro {
                         }
                     }
                 }
-            }
+            }*/
             /**/
 
             ///////////////////////////////////////////////////////////////
