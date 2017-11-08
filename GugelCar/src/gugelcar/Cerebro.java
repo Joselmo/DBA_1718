@@ -31,6 +31,8 @@ class Cerebro {
     private int [][] mapaMundo;
     private int fantasmita_x;       // Variable X de origen del algoritmo
     private int fantasmita_y;       // Variable Y de origen del algoritmo
+    private int objetivoX;
+    private int objetivoY;
 
     // METODOS
     /**
@@ -215,6 +217,11 @@ class Cerebro {
                 for(int i = pos_fila_mapa - 2, x = 0; i <= pos_fila_mapa + 2; i++, x++){
                     for(int j = pos_col_mapa - 2, y = 0; j <= pos_col_mapa + 2; j++, y++){
                         mapaMundo[i][j] = radarFantasmita[x][y]+1;
+
+                        if (radarFantasmita[x][y] == 2){
+                            objetivoX = i;
+                            objetivoY = j;
+                        }
                     }
                 }
             } else {
@@ -270,25 +277,95 @@ class Cerebro {
 
     /**
     * Algoritmo que escanea los bordes del muro proximo al objetivo con el fin de comprobar si hay GAMEOVER
-     * @author David Vargas Carrillo, Angel Piñar Rivas
+     * @author David Vargas Carrillo, Angel Piñar Rivas, Diego Iáñez Ávila
      * @return True si el objetivo no es alcanzable, false si el fantasma no está activo/no puede decir si es alcanzable
      *
      */
     boolean Fantasmita() {
         boolean camino_cerrado = false;
-        if(fantasma_activo){
-            //@todo El rollo de bordear el murito
-            /*
-            Sugerencia: hacer un """pulgarcito""" marcando por donde ha pasado (habría que crear una matriz
-            nueva del mapa, sacamos un cacho de 50x50 o 100x100, no hace falta copiarla entera).
-            El fantasmita buscara en sus 8 casillas adyacentes una de camino que esté junto
-            a un muro visible por esas 8 casillas adyacentes (para evitar que se vaya a un muro del otro lado
-            de la calle) y que además no haya pasado por ahí (para que no vuelva atrás).
-            Si llega al punto de que solo puede ir a sitios marcados, quiere decir que ha dado la vuelta al muro
-            y por tanto es inalcanzable (A NO SER QUE HAYA PASADO POR ENCIMA DEL OBJETIVO, este caso se podría dar
-            y por tanto hay que controlarlo.)
-             */
-            System.out.println("\n\n\n\nHA LLAMADO AL FANTASMITA SOCORRO\n\n\n\n\n");
+        if (fantasma_activo){
+            System.out.println("Lanzando fantasmita...");
+
+            int minX, maxX, minY, maxY;
+            int x = minX = maxX = fantasmita_x;
+            int y = minY = maxY = fantasmita_y;
+
+            boolean salir = false;
+
+            while (!salir){
+                // Detectar si el fantasmita está pisando el objetivo
+                if (mapaMundo[x][y] == 3){
+                    camino_cerrado = false;
+                    salir = true;
+                }
+
+                // Decidir siguiente movimiento
+                // 0 = desconocido, 1 = camino, 2 = muro, 3 = objetivo
+                if (mapaMundo[x][y-1] == 2 && mapaMundo[x+1][y-1] == 2 && mapaMundo[x+1][y] == 1) {
+                    // Ir al este
+                    x += 1;
+                }
+                else if (mapaMundo[x][y-1] == 2 && mapaMundo[x+1][y-1] == 1){
+                    // Ir al noreste
+                    x += 1;
+                    y -= 1;
+                }
+                else if (mapaMundo[x-1][y] == 2 && mapaMundo[x-1][y-1] == 2 && mapaMundo[x][y-1] == 1){
+                    // Ir al norte
+                    y -= 1;
+                }
+                else if (mapaMundo[x-1][y] == 2 && mapaMundo[x-1][y-1] == 1){
+                    // Ir al noroeste
+                    x -= 1;
+                    y -= 1;
+                }
+                else if (mapaMundo[x][y+1] == 2 && mapaMundo[x-1][y+1] == 2 && mapaMundo[x-1][y] == 1){
+                    // Ir al oeste
+                    x -= 1;
+                }
+                else if (mapaMundo[x][y+1] == 2 && mapaMundo[x-1][y+1] == 1){
+                    // Ir al suroeste
+                    x -= 1;
+                    y += 1;
+                }
+                else if (mapaMundo[x+1][y] == 2 && mapaMundo[x+1][y+1] == 2 && mapaMundo[x][y+1] == 1){
+                    // Ir al sur
+                    y += 1;
+                }
+                else if (mapaMundo[x+1][y] == 2 && mapaMundo[x+1][y+1] == 1){
+                    // Ir al sureste
+                    x += 1;
+                    y += 1;
+                }
+                else{
+                    // No hay suficientes datos
+                    camino_cerrado = false;
+                    salir = true;
+                    System.out.println("Sin datos para fantasmita.");
+                }
+
+                minX = Integer.min(x, minX);
+                minY = Integer.min(y, minY);
+                maxX = Integer.max(x, maxX);
+                maxY = Integer.max(y ,maxY);
+
+                // En caso de que nos hayamos movido al lugar desde el que empezamos, sabemos que no hay solución
+                // Siempre y cuando el objetivo esté contenido dentro del área recorrida
+                if (!salir && x == fantasmita_x && y == fantasmita_y){
+                    if (minX < objetivoX && maxX > objetivoX && minY < objetivoY && maxY > objetivoY) {
+                        camino_cerrado = true;
+                        salir = true;
+
+                        System.out.println("\n-------------------------------------------------------------------");
+                        System.out.println("Game over detectado.");
+                        System.out.println("-------------------------------------------------------------------");
+                    }
+                    else{
+                        camino_cerrado = false;
+                        salir = false;
+                    }
+                }
+            }
         }
         return camino_cerrado;
     }
