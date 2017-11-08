@@ -41,6 +41,7 @@ public class AgentNameCapture extends JDialog {
         mapSelectionBox.addItem("map5"); mapSelectionBox.addItem("map6");
         mapSelectionBox.addItem("map7"); mapSelectionBox.addItem("map8");
         mapSelectionBox.addItem("map9"); mapSelectionBox.addItem("map10");
+        mapSelectionBox.addItem("map11");
 
         // call onCancel() when cross is clicked
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);

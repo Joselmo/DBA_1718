@@ -4,6 +4,7 @@ import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 class Cerebro {
     //DATOS MIEMBROS
@@ -491,21 +492,21 @@ class Cerebro {
         // podemos saber si tenemos que lanzarnos a comprobar lo del fantasma o no
 
         ////////////////////////////// FIN TOCHACO CON IDEAS GUAYS DE MEJORA ///////////////////////////////////////
-        // @todo comprobar la eficiencia de todo esto
 
         for(int i=0 ; i<5 ; i++){
-            if(radarFantasmita[i][0] == 2){ // Lado izquierdo
-
-                if(i==0){
+            // LADO IZQUIERDO
+            if(radarFantasmita[i][0] == 2){
+                if(i == 0){
                     if(radarFantasmita[i+1][0] == 1 && radarFantasmita[i+1][1] == 1 && radarFantasmita[i][1] == 1){ //esquina sup izq
                         fantasma_activo = true;
 
-                                /* * /
-                                Comprobar lado izquierdo libre y lado superior libre.
-                                Coger uno de los libres y posicionar ahi el fantasmita
-                                Si no hay libres, usar posicion del coche
-                                /**/
-                        if(mapaMundo[pos_fila_mapa][pos_col_mapa-1]==1){ //lado izquierdo (En mapamundo 0=desconocido 1=camino 2=muro 3=objetivo)
+                        /* * /
+                        Comprobar lado izquierdo libre y lado superior libre.
+                        Coger uno de los libres y posicionar ahi el fantasmita
+                        Si no hay libres, usar posicion del coche
+                        /**/
+                        // lado izquierdo (En mapamundo 0=desconocido 1=camino 2=muro 3=objetivo)
+                        if(mapaMundo[pos_fila_mapa][pos_col_mapa-1]==1){
                             fantasmita_x = pos_fila_mapa;
                             fantasmita_y = pos_col_mapa-1;
                         } else if(mapaMundo[pos_fila_mapa-1][pos_col_mapa]==1){
@@ -520,7 +521,7 @@ class Cerebro {
                     if(radarFantasmita[i-1][0] == 1 && radarFantasmita[i-1][1] == 1 && radarFantasmita[i][1] == 1){ //esquina inf izq
                         fantasma_activo = true;
 
-                        //Comprobar izquierda y abajo
+                        // Comprobar izquierda y abajo
                         if(mapaMundo[pos_fila_mapa][pos_col_mapa-1]==1){
                             fantasmita_x = pos_fila_mapa;
                             fantasmita_y = pos_col_mapa-1;
@@ -536,9 +537,37 @@ class Cerebro {
                     comprobarColAccesible(0);
                 }
 
-                //@todo Imprimir radar para ver como comprueba el coso este (ponle un sleep mejor para que no se pierda)
+                // Impresion del radar fantasmita
+                for (int fil = 0; fil < 5; fil++) {
+                    for (int col = 0; col < 5; col++) {
+                        System.out.print(radarFantasmita[fil][col] + "  ");
+                    }
+                    System.out.print("\n");
+                }
 
-            } else if(radarFantasmita[i][4] == 2){ // Lado derecho
+
+
+
+                // Sleep para ver los resultados
+                System.out.println("ME VOY A DORMIR");
+                if (fantasma_activo) System.out.println("FANTASMA ACTIVO");
+                else System.out.println("FANTASMA INACTIVO");
+                try
+                {
+                    Thread.sleep(1000);
+                }
+                catch(InterruptedException ex)
+                {
+                    Thread.currentThread().interrupt();
+                }
+
+
+
+
+
+
+            // LADO DERECHO
+            } else if(radarFantasmita[i][4] == 2) {
                 if(i==0){
                     if(radarFantasmita[i+1][4] == 1 && radarFantasmita[i+1][3] == 1 && radarFantasmita[i][3] == 1){ //esquina sup der
                         fantasma_activo = true;
@@ -571,20 +600,93 @@ class Cerebro {
                             fantasmita_y = pos_col_mapa;
                         }
                     }
-                } else{
+                } else {
                     comprobarColAccesible(4);
                 }
-                //@todo Imprimir radar para ver como comprueba el coso este
-            } else if(radarFantasmita[0][i] == 2){ // Lado superior
+
+                // Impresion del radar fantasmita
+                for (int fil = 0; fil < 5; fil++) {
+                    for (int col = 0; col < 5; col++) {
+                        System.out.print(radarFantasmita[fil][col] + "  ");
+                    }
+                    System.out.print("\n");
+                }
+
+
+
+                // Sleep para ver los resultados
+                System.out.println("ME VOY A DORMIR");
+                if (fantasma_activo) System.out.println("FANTASMA ACTIVO");
+                else System.out.println("FANTASMA INACTIVO");
+                try
+                {
+                    Thread.sleep(1000);
+                }
+                catch(InterruptedException ex)
+                {
+                    Thread.currentThread().interrupt();
+                }
+
+
+
+
+
+
+            // LADO SUPERIOR
+            } else if(radarFantasmita[0][i] == 2) {
                 comprobarFilaAccesible(0);
-                //@todo Imprimir radar para ver como comprueba el coso este
-            } else if(radarFantasmita[4][i] == 2){ // Lado inferior
+
+                // Impresion del radar fantasmita
+                for (int fil = 0; fil < 5; fil++) {
+                    for (int col = 0; col < 5; col++) {
+                        System.out.print(radarFantasmita[fil][col] + "  ");
+                    }
+                    System.out.print("\n");
+                }
+
+
+                // Sleep para ver los resultados
+                System.out.println("ME VOY A DORMIR");
+                if (fantasma_activo) System.out.println("FANTASMA ACTIVO");
+                else System.out.println("FANTASMA INACTIVO");
+                try
+                {
+                    Thread.sleep(1000);
+                }
+                catch(InterruptedException ex)
+                {
+                    Thread.currentThread().interrupt();
+                }
+
+
+
+
+            // LADO INFERIOR
+            } else if(radarFantasmita[4][i] == 2) {
                 comprobarFilaAccesible(4);
-                //@todo Imprimir radar para ver como comprueba el coso este
+
+                // Impresion del radar fantasmita
+                for (int fil = 0; fil < 5; fil++) {
+                    for (int col = 0; col < 5; col++) {
+                        System.out.print(radarFantasmita[fil][col] + "  ");
+                    }
+                    System.out.print("\n");
+                }
+
+
+                // Sleep para ver los resultados
+                System.out.println("ME VOY A DORMIR");
+                if (fantasma_activo) System.out.println("FANTASMA ACTIVO");
+                else System.out.println("FANTASMA INACTIVO");
+                try
+                {
+                    Thread.sleep(1000);
+                }
+                catch(InterruptedException ex)
+                {
+                    Thread.currentThread().interrupt();
+                }
             }
         }
-
-
-
     }
 }
