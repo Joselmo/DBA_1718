@@ -17,16 +17,14 @@ public class GugelCarView extends JFrame {
     private JButton buttonSalir;
     private JLabel mapIndicator;
     private JPanel contentPane;
-    private JPanel buttonsPanel;
-    private JPanel informationPanel;
-    private JPanel ScannerPanel;
-    private JPanel RadarPanel;
     private JTextArea scannerTextArea;
     private JTextArea generalMsgTextArea;
     private JTextArea radarTextArea;
     private JLabel traceLabel;
-    private JPanel canvasPanel;
     private TraceMap traceMap;
+    private JPanel canvasPanel;
+    private JPanel titlePanel;
+    private JPanel buttonsPanel;
 
     private GugelCar gugelcar;
 
@@ -76,7 +74,7 @@ public class GugelCarView extends JFrame {
      */
     public GugelCarView(String mapa) {
         setContentPane(contentPane);
-        setTitle("DBA Practica 2: practica2.gugelcar.practica2.gugelcar.GugelCar");
+        setTitle("DBA Practica 2: GugelCar");
         setSize(650, 400);
         setMapIndicator(mapa);
         initComponents();
