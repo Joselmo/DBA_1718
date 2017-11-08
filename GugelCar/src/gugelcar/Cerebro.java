@@ -205,12 +205,6 @@ class Cerebro {
             // Se marca en la memoria que hemos pasado por la casilla
             mapaPulgarcito[pos_fila_mapa][pos_col_mapa]++;
 
-            //////////////////////////////////////////////////////////////////////
-            // ¿QUIZÁS ESTE CACHO (O PARTE DE ÉL) DEBERÍA ESTAR EN PROCESSPERCEPTION?
-            // Despues de haber codificado esto me parece que se ha vuelto un metodo demasiado grande
-            // dividlo como veais
-            //////////////////////////////////////////////////////////////////////
-
             // @todo Por si acaso, que otra persona compruebe que escribe bien en mapaMundo
             // Ángel lo ha probado en el mapa 1 pero aun así es una persona insegura.
 
@@ -227,127 +221,9 @@ class Cerebro {
                 System.err.println("Se ha intentado escribir en una posicion invalida de mapaMundo");
             }
 
-            /*
-            ¡¡OJO!! el código esta super incompleto y muy en sucio (EN DESARROLLO)
-            así que no me vengais con tonterías que ya lo sé.
-            */
-
-            /*
-             * Ahora se va a comprobar si el fantasma se puede lanzar en el caso de que no este ya ejecutandose.
-             * El objetivo es encontrar una situacion donde, a priori, el objetivo parezca inaccesible y haya que
-             * comprobarlo a la hora de determinar una situacion GAMEOVER.
-             */
-
-            //////////////////////////////// TOCHACO CON IDEAS GUAYS DE MEJORA /////////////////////////////////////////
-
-            // @todo mejora 1:
-            // Poner esto en la funcion Fantasmita y llamar cada vez a la funcion, y que esta decida ahi si lo lanza
-            // o no
-
-            // @todo mejora 2:
-            // Realmente se sabe de antemano hacia donde esta el objetivo, por tanto solo es necesario comprobar en uno
-            // de los bordes y no recorrer los cuatro
-
-            // @todo mejora 3:
-            // Tambien es posible saber si tenemos la posibilidad de encontrarnos con el objetivo en nuestra area, a
-            // partir de la distancia euclidea al mismo. Por tanto, definiendo una distancia max (que el objetivo se
-            // encuentre en una de las esquinas) y comprobando la distancia a la que estamos mediante el scanner,
-            // podemos saber si tenemos que lanzarnos a comprobar lo del fantasma o no
-
-            ////////////////////////////// FIN TOCHACO CON IDEAS GUAYS DE MEJORA ///////////////////////////////////////
-            // @todo comprobar la eficiencia de todo esto
-
             if(!fantasma_activo){
-
-                for(int i=0 ; i<5 ; i++){
-                    if(radarFantasmita[i][0] == 2){ // Lado izquierdo
-
-                        if(i==0){
-                            if(radarFantasmita[i+1][0] == 1 && radarFantasmita[i+1][1] == 1 && radarFantasmita[i][1] == 1){ //esquina sup izq
-                                fantasma_activo = true;
-
-                                /* * /
-                                Comprobar lado izquierdo libre y lado superior libre.
-                                Coger uno de los libres y posicionar ahi el fantasmita
-                                Si no hay libres, usar posicion del coche
-                                /**/
-                                if(mapaMundo[pos_fila_mapa][pos_col_mapa-1]==1){ //lado izquierdo (En mapamundo 0=desconocido 1=camino 2=muro 3=objetivo)
-                                    fantasmita_x = pos_fila_mapa;
-                                    fantasmita_y = pos_col_mapa-1;
-                                } else if(mapaMundo[pos_fila_mapa-1][pos_col_mapa]==1){
-                                    fantasmita_x = pos_fila_mapa-1;
-                                    fantasmita_y = pos_col_mapa;
-                                } else{
-                                    fantasmita_x = pos_fila_mapa;
-                                    fantasmita_y = pos_col_mapa;
-                                }
-                            }
-                        } else if(i==4){
-                            if(radarFantasmita[i-1][0] == 1 && radarFantasmita[i-1][1] == 1 && radarFantasmita[i][1] == 1){ //esquina inf izq
-                                fantasma_activo = true;
-
-                                //Comprobar izquierda y abajo
-                                if(mapaMundo[pos_fila_mapa][pos_col_mapa-1]==1){
-                                    fantasmita_x = pos_fila_mapa;
-                                    fantasmita_y = pos_col_mapa-1;
-                                } else if(mapaMundo[pos_fila_mapa+1][pos_col_mapa]==1){
-                                    fantasmita_x = pos_fila_mapa+1;
-                                    fantasmita_y = pos_col_mapa;
-                                } else{
-                                    fantasmita_x = pos_fila_mapa;
-                                    fantasmita_y = pos_col_mapa;
-                                }
-                            }
-                        } else{
-                            comprobarColAccesible(0);
-                        }
-                    } else if(radarFantasmita[i][4] == 2){ // Lado derecho
-                        if(i==0){
-                            if(radarFantasmita[i+1][4] == 1 && radarFantasmita[i+1][3] == 1 && radarFantasmita[i][3] == 1){ //esquina sup der
-                                fantasma_activo = true;
-
-                                //Comprobar arriba y derecha
-                                if(mapaMundo[pos_fila_mapa][pos_col_mapa+1]==1){
-                                    fantasmita_x = pos_fila_mapa;
-                                    fantasmita_y = pos_col_mapa+1;
-                                } else if(mapaMundo[pos_fila_mapa-1][pos_col_mapa]==1){
-                                    fantasmita_x = pos_fila_mapa-1;
-                                    fantasmita_y = pos_col_mapa;
-                                } else{
-                                    fantasmita_x = pos_fila_mapa;
-                                    fantasmita_y = pos_col_mapa;
-                                }
-                            }
-                        } else if(i==4){
-                            if(radarFantasmita[i-1][4] == 1 && radarFantasmita[i-1][3] == 1 && radarFantasmita[i][3] == 1){ //esquina inf der
-                                fantasma_activo = true;
-
-                                //Comprobar abajo y derecha
-                                if(mapaMundo[pos_fila_mapa][pos_col_mapa+1]==1){
-                                    fantasmita_x = pos_fila_mapa;
-                                    fantasmita_y = pos_col_mapa+1;
-                                } else if(mapaMundo[pos_fila_mapa+1][pos_col_mapa]==1){
-                                    fantasmita_x = pos_fila_mapa+1;
-                                    fantasmita_y = pos_col_mapa;
-                                } else{
-                                    fantasmita_x = pos_fila_mapa;
-                                    fantasmita_y = pos_col_mapa;
-                                }
-                            }
-                        } else{
-                            comprobarColAccesible(4);
-                        }
-                    } else if(radarFantasmita[0][i] == 2){ // Lado superior
-                        comprobarFilaAccesible(0);
-                    } else if(radarFantasmita[4][i] == 2){ // Lado inferior
-                        comprobarFilaAccesible(4);
-                    }
-                }
+                comprobarObjetivoVisible();
             }
-
-            ///////////////////////////////////////////////////////////////
-            // FIN DEL CACHO
-            ///////////////////////////////////////////////////////////////
 
             // Se desplaza la posicion en la matriz memoria segun el movimiento decidido
             switch (movimiento) {
@@ -589,5 +465,126 @@ class Cerebro {
                 fantasmita_y = pos_col_mapa;
             }
         }
+    }
+
+    /** Comprueba si el objetivo está en el radar y es inaccesible al momento de descubrirlo para así
+     * lanzar el fantasmita.
+     *
+     * @author David Vargas Carrillo, Ángel Píñar Rivas
+     */
+
+    private void comprobarObjetivoVisible(){
+        //////////////////////////////// TOCHACO CON IDEAS GUAYS DE MEJORA /////////////////////////////////////////
+
+        // @todo mejora 1:
+        // Poner esto en la funcion Fantasmita y llamar cada vez a la funcion, y que esta decida ahi si lo lanza
+        // o no
+
+        // @todo mejora 2:
+        // Realmente se sabe de antemano hacia donde esta el objetivo, por tanto solo es necesario comprobar en uno
+        // de los bordes y no recorrer los cuatro
+
+        // @todo mejora 3:
+        // Tambien es posible saber si tenemos la posibilidad de encontrarnos con el objetivo en nuestra area, a
+        // partir de la distancia euclidea al mismo. Por tanto, definiendo una distancia max (que el objetivo se
+        // encuentre en una de las esquinas) y comprobando la distancia a la que estamos mediante el scanner,
+        // podemos saber si tenemos que lanzarnos a comprobar lo del fantasma o no
+
+        ////////////////////////////// FIN TOCHACO CON IDEAS GUAYS DE MEJORA ///////////////////////////////////////
+        // @todo comprobar la eficiencia de todo esto
+
+        for(int i=0 ; i<5 ; i++){
+            if(radarFantasmita[i][0] == 2){ // Lado izquierdo
+
+                if(i==0){
+                    if(radarFantasmita[i+1][0] == 1 && radarFantasmita[i+1][1] == 1 && radarFantasmita[i][1] == 1){ //esquina sup izq
+                        fantasma_activo = true;
+
+                                /* * /
+                                Comprobar lado izquierdo libre y lado superior libre.
+                                Coger uno de los libres y posicionar ahi el fantasmita
+                                Si no hay libres, usar posicion del coche
+                                /**/
+                        if(mapaMundo[pos_fila_mapa][pos_col_mapa-1]==1){ //lado izquierdo (En mapamundo 0=desconocido 1=camino 2=muro 3=objetivo)
+                            fantasmita_x = pos_fila_mapa;
+                            fantasmita_y = pos_col_mapa-1;
+                        } else if(mapaMundo[pos_fila_mapa-1][pos_col_mapa]==1){
+                            fantasmita_x = pos_fila_mapa-1;
+                            fantasmita_y = pos_col_mapa;
+                        } else{
+                            fantasmita_x = pos_fila_mapa;
+                            fantasmita_y = pos_col_mapa;
+                        }
+                    }
+                } else if(i==4){
+                    if(radarFantasmita[i-1][0] == 1 && radarFantasmita[i-1][1] == 1 && radarFantasmita[i][1] == 1){ //esquina inf izq
+                        fantasma_activo = true;
+
+                        //Comprobar izquierda y abajo
+                        if(mapaMundo[pos_fila_mapa][pos_col_mapa-1]==1){
+                            fantasmita_x = pos_fila_mapa;
+                            fantasmita_y = pos_col_mapa-1;
+                        } else if(mapaMundo[pos_fila_mapa+1][pos_col_mapa]==1){
+                            fantasmita_x = pos_fila_mapa+1;
+                            fantasmita_y = pos_col_mapa;
+                        } else{
+                            fantasmita_x = pos_fila_mapa;
+                            fantasmita_y = pos_col_mapa;
+                        }
+                    }
+                } else{
+                    comprobarColAccesible(0);
+                }
+
+                //@todo Imprimir radar para ver como comprueba el coso este (ponle un sleep mejor para que no se pierda)
+
+            } else if(radarFantasmita[i][4] == 2){ // Lado derecho
+                if(i==0){
+                    if(radarFantasmita[i+1][4] == 1 && radarFantasmita[i+1][3] == 1 && radarFantasmita[i][3] == 1){ //esquina sup der
+                        fantasma_activo = true;
+
+                        //Comprobar arriba y derecha
+                        if(mapaMundo[pos_fila_mapa][pos_col_mapa+1]==1){
+                            fantasmita_x = pos_fila_mapa;
+                            fantasmita_y = pos_col_mapa+1;
+                        } else if(mapaMundo[pos_fila_mapa-1][pos_col_mapa]==1){
+                            fantasmita_x = pos_fila_mapa-1;
+                            fantasmita_y = pos_col_mapa;
+                        } else{
+                            fantasmita_x = pos_fila_mapa;
+                            fantasmita_y = pos_col_mapa;
+                        }
+                    }
+                } else if(i==4){
+                    if(radarFantasmita[i-1][4] == 1 && radarFantasmita[i-1][3] == 1 && radarFantasmita[i][3] == 1){ //esquina inf der
+                        fantasma_activo = true;
+
+                        //Comprobar abajo y derecha
+                        if(mapaMundo[pos_fila_mapa][pos_col_mapa+1]==1){
+                            fantasmita_x = pos_fila_mapa;
+                            fantasmita_y = pos_col_mapa+1;
+                        } else if(mapaMundo[pos_fila_mapa+1][pos_col_mapa]==1){
+                            fantasmita_x = pos_fila_mapa+1;
+                            fantasmita_y = pos_col_mapa;
+                        } else{
+                            fantasmita_x = pos_fila_mapa;
+                            fantasmita_y = pos_col_mapa;
+                        }
+                    }
+                } else{
+                    comprobarColAccesible(4);
+                }
+                //@todo Imprimir radar para ver como comprueba el coso este
+            } else if(radarFantasmita[0][i] == 2){ // Lado superior
+                comprobarFilaAccesible(0);
+                //@todo Imprimir radar para ver como comprueba el coso este
+            } else if(radarFantasmita[4][i] == 2){ // Lado inferior
+                comprobarFilaAccesible(4);
+                //@todo Imprimir radar para ver como comprueba el coso este
+            }
+        }
+
+
+
     }
 }
